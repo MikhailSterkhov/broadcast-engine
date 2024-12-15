@@ -24,6 +24,14 @@
         <jb.annotations.version>22.0.0</jb.annotations.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>MikhailSterkhov</name>
+            <url>https://maven.pkg.github.com/MikhailSterkhov/broadcast-engine</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <!-- Annotations-processing dependencies -->
         <dependency>
@@ -39,4 +47,57 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>clean package install</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                    <outputDirectory>build</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>**/*.java</exclude>
+                                <exclude>**/*.SF</exclude>
+                                <exclude>**/*.DSA</exclude>
+                                <exclude>module-info.class</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
