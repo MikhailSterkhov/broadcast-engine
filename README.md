@@ -122,14 +122,14 @@ is the dependency identifier from the `Artifact ID` table column:
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
     <artifactId>[Artifact-ID]</artifactId>
-    <version>1.0.0</version>
+    <version>[Version]</version>
 </dependency>
 ```
 
 **Gradle / Groovy:**
 
 ```groovy
-implementation 'con.github.mikhailterkhov:[Artifact-ID]:1.0.0'
+implementation 'con.github.mikhailterkhov:[Artifact-ID]:[Version]'
 ```
 
 ---
