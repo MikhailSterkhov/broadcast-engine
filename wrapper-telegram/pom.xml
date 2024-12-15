@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.mikhailsterkhov</groupId>
+        <artifactId>social-broadcast-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>social-broadcast-telegram</artifactId>
+
+    <properties>
+        <telegram.api.version>7.11.0</telegram.api.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-engine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>${telegram.api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>

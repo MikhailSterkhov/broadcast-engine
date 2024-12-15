@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.mikhailsterkhov</groupId>
+        <artifactId>social-broadcast-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>social-broadcast-examples</artifactId>
+
+    <properties>
+        <h2database.version>2.1.214</h2database.version>
+
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-engine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-hibernate</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-jdbc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-smtp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-telegram</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Database Connection Drivers dependencies -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2database.version}</version>
+        </dependency>
+    </dependencies>
+</project>

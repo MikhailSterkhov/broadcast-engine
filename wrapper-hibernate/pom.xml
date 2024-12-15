@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.mikhailsterkhov</groupId>
+        <artifactId>social-broadcast-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>social-broadcast-hibernate</artifactId>
+
+    <properties>
+        <hibernate.version>6.5.2.Final</hibernate.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-engine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Database Connection utility dependencies -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.6.14.Final</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>
