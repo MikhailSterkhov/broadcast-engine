@@ -11,8 +11,6 @@ import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
 import io.broadcast.wrapper.hibernate.HibernateRecordMetadata;
 import io.broadcast.wrapper.hibernate.HibernateRecordSelector;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.Getter;
 import lombok.ToString;
 import net.bytebuddy.utility.RandomString;
@@ -56,7 +54,7 @@ public class HibernateBroadcastExample {
                 });
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
-        broadcastEngine.scheduleBroadcastsNow(Duration.ofSeconds(15));
+        broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(15));
     }
 
     public static SessionFactory provideSessionFactory() {

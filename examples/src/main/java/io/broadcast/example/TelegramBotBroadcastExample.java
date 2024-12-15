@@ -31,7 +31,7 @@ public class TelegramBotBroadcastExample {
                 .setPreparedMessage(preparedMessage);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
-        broadcastEngine.scheduleBroadcastsNow(Duration.ofSeconds(10));
+        broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(10));
     }
 
     private static @NotNull TelegramBot startTelegramBot() {

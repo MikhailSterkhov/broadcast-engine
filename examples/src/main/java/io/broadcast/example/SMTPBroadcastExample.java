@@ -31,13 +31,13 @@ public class SMTPBroadcastExample {
                         .email("<mail-address>")
                         .password("<mail-password>")
                         .build())
-                .subject("<Message-Subject>")
                 .smtpHost("smtp.yandex.ru")
                 .smtpPort("465")
                 .build();
 
         PreparedMessage<Integer, String> preparedMessage
                 = PreparedMessage.func(
+                (record) -> "<Message-Subject>",
                 (record) -> String.format("Hello, %s! ", record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
@@ -52,6 +52,6 @@ public class SMTPBroadcastExample {
                 });
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
-        broadcastEngine.scheduleBroadcastsNow(Duration.ofDays(1));
+        broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
     }
 }

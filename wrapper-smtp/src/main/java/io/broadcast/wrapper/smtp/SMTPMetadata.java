@@ -10,7 +10,6 @@ import lombok.ToString;
 public class SMTPMetadata {
 
     private final MailCredentials senderCredentials;
-    private final String subject;
     private final String smtpHost;
     private final String smtpPort;
 }

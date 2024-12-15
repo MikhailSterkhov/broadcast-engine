@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Optional;
 import java.util.Properties;
 
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
 
             message.setFrom(new InternetAddress(smtpMetadata.getSenderCredentials().getEmail()));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(announcement.getRecord().getId()));
-            message.setSubject(smtpMetadata.getSubject());
+            message.setSubject(Optional.ofNullable(announcement.getSubject()).orElse("<No-Subject>"));
             message.setContent(announcement.getPreparedText(), "text/html; charset=UTF-8");
 
             Transport.send(message);

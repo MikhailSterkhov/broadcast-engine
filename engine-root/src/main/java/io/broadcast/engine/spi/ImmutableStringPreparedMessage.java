@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 public class ImmutableStringPreparedMessage<I, T> implements PreparedMessage<I, T> {
 
+    private final String subject;
     private final String text;
 
     @Override
     public @NotNull Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record) {
-        return new Announcement<>(record, text);
+        return new Announcement<>(record, subject, text);
     }
 }

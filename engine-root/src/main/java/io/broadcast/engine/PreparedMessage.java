@@ -14,13 +14,24 @@ public interface PreparedMessage<I, T> {
     @NotNull
     Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record);
 
-    @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutable(String text) {
-        return new ImmutableStringPreparedMessage<>(text);
+    @Contract("_, _ -> new")
+    static <I, T> @NotNull PreparedMessage<I, T> immutable(String subject, String text) {
+        return new ImmutableStringPreparedMessage<>(subject, text);
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> func(Function<Record<I, T>, String> function) {
-        return new ApplicablePreparedMessage<>(function);
+    static <I, T> @NotNull PreparedMessage<I, T> immutable(String text) {
+        return new ImmutableStringPreparedMessage<>(null, text);
+    }
+
+    @Contract("_, _ -> new")
+    static <I, T> @NotNull PreparedMessage<I, T> func(Function<Record<I, T>, String> subjectFunction,
+                                                      Function<Record<I, T>, String> textFunction) {
+        return new ApplicablePreparedMessage<>(subjectFunction, textFunction);
+    }
+
+    @Contract("_ -> new")
+    static <I, T> @NotNull PreparedMessage<I, T> func(Function<Record<I, T>, String> textFunction) {
+        return new ApplicablePreparedMessage<>(null, textFunction);
     }
 }

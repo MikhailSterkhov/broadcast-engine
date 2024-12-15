@@ -53,7 +53,7 @@ public final class BroadcastEngine {
         sneakyThrows(this::broadcast0);
     }
 
-    public void scheduleBroadcastsNow(@NotNull Duration duration) {
+    public void scheduleBroadcastEverytime(@NotNull Duration duration) {
         if (scheduler == null) {
             scheduler = Scheduler.defaultScheduler();
         }

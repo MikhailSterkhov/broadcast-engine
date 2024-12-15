@@ -10,16 +10,17 @@ import io.broadcast.engine.record.extract.Extractors;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ImmutableRecordsBroadcastExample {
 
     private static final Set<Record<Integer, String>> IMMUTABLE_RECORDS =
             new HashSet<>(
                     Arrays.asList(
-                            Record.ofInt("Mikhail", Object::hashCode),
-                            Record.ofInt("Sergey", Object::hashCode),
-                            Record.ofInt("Mark", Object::hashCode),
-                            Record.ofInt("Andrey", Object::hashCode)
+                            Record.ofInt("Mikhail", (s) -> ThreadLocalRandom.current().nextInt()),
+                            Record.ofInt("Sergey", (s) -> ThreadLocalRandom.current().nextInt()),
+                            Record.ofInt("Mark", (s) -> ThreadLocalRandom.current().nextInt()),
+                            Record.ofInt("Andrey", (s) -> ThreadLocalRandom.current().nextInt())
                     )
             );
 
