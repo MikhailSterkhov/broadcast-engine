@@ -9,6 +9,12 @@
 
 # OVERVIEW
 
+The library provides a set of tools for convenient realization of 
+the system of sending messages between users of bots for social networks 
+and not only.
+
+---
+
 The library provides a set of technologies to handle the 
 dissemination of information across various integration services, 
 with the ability to retrieve source records relative to which 
