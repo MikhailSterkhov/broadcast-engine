@@ -44,7 +44,7 @@ public class TelegramBotBroadcastExample {
     }
 
     private static @NotNull TelegramBot startTelegramBot() {
-        TelegramBot telegramBot = new TelegramBot("7993857695:AAGRnzL0LcbnTcTvviXQVDr8YvDE5zhnuBc");
+        TelegramBot telegramBot = new TelegramBot("<your-telegram-bot-token>");
         telegramBot.setUpdatesListener(updates -> {
 
             for (Update update : updates) {
