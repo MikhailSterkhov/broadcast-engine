@@ -36,7 +36,7 @@ public class SMTPBroadcastExample {
                 .build();
 
         PreparedMessage<Integer, String> preparedMessage
-                = PreparedMessage.func(
+                = PreparedMessage.serialize(
                 (record) -> "<Message-Subject>",
                 (record) -> String.format("Hello, %s! ", record.getId()));
 

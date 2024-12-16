@@ -26,7 +26,7 @@ public class JdbcH2BroadcastExample {
                 .build();
 
         PreparedMessage<Integer, String> preparedMessage
-                = PreparedMessage.func(
+                = PreparedMessage.serializeContent(
                 (record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()

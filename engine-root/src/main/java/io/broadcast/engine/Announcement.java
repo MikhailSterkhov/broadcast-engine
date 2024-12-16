@@ -13,10 +13,9 @@ import io.broadcast.engine.record.Record;
 public class Announcement<I, T> {
 
     private final Record<I, T> record;
-    private final String subject;
-    private final String preparedText;
+    private final TextMessage textMessage;
 
-    public boolean isTextPrepared() {
-        return preparedText != null;
+    public boolean hasMessage() {
+        return textMessage != null;
     }
 }

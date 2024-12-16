@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ThreadSchedulerExecutor implements Scheduler {
 
+    private static ScheduledExecutorService executorService;
     private final int corePoolSize;
-    private ScheduledExecutorService executorService;
 
     @Override
     public void schedule(@NotNull Duration duration, @NotNull Runnable runnable) {

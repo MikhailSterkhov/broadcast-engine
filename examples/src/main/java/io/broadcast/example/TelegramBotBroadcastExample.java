@@ -22,7 +22,7 @@ public class TelegramBotBroadcastExample {
 
     public static void main(String[] args) {
         PreparedMessage<Long, String> preparedMessage
-                = PreparedMessage.func(
+                = PreparedMessage.serializeContent(
                 (record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
