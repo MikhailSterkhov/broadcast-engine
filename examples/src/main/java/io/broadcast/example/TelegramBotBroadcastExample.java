@@ -7,6 +7,8 @@ import com.pengrad.telegrambot.model.Update;
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.dispatch.ComplexBroadcastDispatcher;
+import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
@@ -30,7 +32,9 @@ public class TelegramBotBroadcastExample {
                         (record) -> String.format("Hello, @%s, your telegram-id: %d", telegramUsersById.get(record), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
-                .setDispatcher(new TelegramBotDispatcher(startTelegramBot()))
+                .setDispatcher(ComplexBroadcastDispatcher.complex(
+                        new TelegramBotDispatcher(startTelegramBot()),
+                        new STDOUTBroadcastDispatcher<>()))
                 .setRecordExtractor(Extractors.supplier(telegramUsersById::toRecordsSet))
                 .setPreparedMessage(preparedMessage)
                 .setScheduler(Scheduler.threadScheduler(2));
