@@ -17,16 +17,18 @@ import java.sql.SQLException;
 public class JdbcH2BroadcastExample {
 
     public static void main(String[] args) {
-        JdbcRecordMetadata jdbcRecordMetadata = JdbcRecordMetadata.builder()
-                .connection(createH2Connection())
-                .table("players")
-                .idColumn("id")
-                .chunkSize(10) // [effectivity minimal: 1000-2000]
-                .autoCloseable(false)
-                .build();
+        JdbcRecordMetadata<Integer, String> jdbcRecordMetadata =
+                JdbcRecordMetadata.<Integer, String>builder()
+                        .connection(createH2Connection())
+                        .table("players")
+                        .idColumn("id")
+                        .chunkSize(10) // [effectivity minimal: 1000-2000]
+                        .autoCloseable(false)
+                        .jdbcEntityFactory((id, resultSet) -> resultSet.getString(2))
+                        .build();
 
         PreparedMessage<Integer, String> preparedMessage
-                = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
+                = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world, %s!\"", record.getId(), record.getEntity()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())

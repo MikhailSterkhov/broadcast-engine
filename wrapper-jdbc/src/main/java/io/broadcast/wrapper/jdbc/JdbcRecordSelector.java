@@ -15,7 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class JdbcRecordSelector<I, T> implements ChunkyRecordSelector<I, T> {
 
-    private final JdbcRecordMetadata metadata;
+    private final JdbcRecordMetadata<I, T> metadata;
 
     @Override
     public long totalSize() {
