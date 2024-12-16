@@ -6,7 +6,7 @@
 
     <groupId>com.github.mikhailsterkhov</groupId>
     <artifactId>social-broadcast-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <packaging>pom</packaging>
 

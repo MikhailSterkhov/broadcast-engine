@@ -2,7 +2,7 @@
   <img src=".assets/broadcast.png" alt="broadcast" width="250"/>
   <br>
   <img src="https://img.shields.io/badge/language-Java-magenta?style=flat" />
-  <img src="https://img.shields.io/badge/release-v1.0.1-magenta?style=flat" />
+  <img src="https://img.shields.io/badge/release-v1.0.2-magenta?style=flat" />
   <img src="https://img.shields.io/badge/repository-jitpack.io-magenta?style=flat" />
   <img src="https://img.shields.io/badge/license-MIT-magenta?style=flat" />
 </div>
@@ -106,10 +106,10 @@ to facilitate the realization of common business tasks
 
 | Name      | Artifact ID                  | Version | API Usage                                                                                          |
 |-----------|------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
-| Mailing   | `social-broadcast-smtp`      | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
-| Telegram  | `social-broadcast-telegram`  | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Hibernate | `social-broadcast-hibernate` | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
+| JDBC      | `social-broadcast-jdbc`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
+| Mailing   | `social-broadcast-smtp`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
+| Telegram  | `social-broadcast-telegram`  | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
@@ -159,7 +159,7 @@ Dependency:
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
     <artifactId>social-broadcast-engine</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -177,5 +177,5 @@ repositories {
 Dependency:
 
 ```groovy
-implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.1'
+implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.2'
 ```
