@@ -9,6 +9,7 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.telegram.TelegramBotDispatcher;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,8 @@ public class TelegramBotBroadcastExample {
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new TelegramBotDispatcher<>(startTelegramBot()))
                 .setRecordExtractor(Extractors.supplier(() -> TELEGRAM_USERS_RECORDS))
-                .setPreparedMessage(preparedMessage);
+                .setPreparedMessage(preparedMessage)
+                .setScheduler(Scheduler.threadScheduler(2));
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
         broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(10));

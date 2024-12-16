@@ -5,6 +5,7 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
 import io.broadcast.wrapper.hibernate.HibernateRecordMetadata;
 import io.broadcast.wrapper.hibernate.HibernateRecordSelector;
@@ -36,7 +37,8 @@ public class HibernateBroadcastExample {
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
-                .setPreparedMessage(preparedMessage);
+                .setPreparedMessage(preparedMessage)
+                .setScheduler(Scheduler.singleThreadScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
         broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(10));

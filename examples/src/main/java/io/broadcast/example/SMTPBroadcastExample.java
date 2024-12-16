@@ -7,6 +7,7 @@ import io.broadcast.engine.event.ExceptionListener;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.smtp.MailCredentials;
 import io.broadcast.wrapper.smtp.SMTPBroadcastDispatcher;
 import io.broadcast.wrapper.smtp.SMTPMetadata;
@@ -50,7 +51,8 @@ public class SMTPBroadcastExample {
                     public void throwsException(Throwable throwable) {
                         throwable.printStackTrace();
                     }
-                });
+                })
+                .setScheduler(Scheduler.defaultScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
         broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));

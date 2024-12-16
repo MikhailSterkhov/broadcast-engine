@@ -106,10 +106,10 @@ to facilitate the realization of common business tasks
 
 | Name      | Artifact ID                  | Version | API Usage                                                                                                        |
 |-----------|------------------------------|---------|------------------------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.1   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(hibernateRecordMetadata)))` |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.1   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new JdbcRecordSelector<>(jdbcRecordMetadata)))`           |
-| Mailing   | `social-broadcast-smtp`      | 1.0.1   | `pipeline.setDispatcher(new SMTPBroadcastDispatcher<>(smtpMetadata))`                                            |
-| Telegram  | `social-broadcast-telegram`  | 1.0.1   | `pipeline.setDispatcher(new TelegramBotDispatcher<>("<bot-api-token>"))`                                         |
+| Hibernate | `social-broadcast-hibernate` | 1.0.1   | [Click to teleport to unit-test class](/examples/src/main/java/io/broadcast/example/HibernateBroadcastExample)   |
+| JDBC      | `social-broadcast-jdbc`      | 1.0.1   | [Click to teleport to unit-test class](/examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample)      |
+| Mailing   | `social-broadcast-smtp`      | 1.0.1   | [Click to teleport to unit-test class](/examples/src/main/java/io/broadcast/example/SMTPBroadcastExample)        |
+| Telegram  | `social-broadcast-telegram`  | 1.0.1   | [Click to teleport to unit-test class](/examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample) |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
