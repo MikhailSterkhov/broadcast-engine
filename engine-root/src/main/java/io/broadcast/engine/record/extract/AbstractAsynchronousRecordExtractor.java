@@ -10,9 +10,13 @@ import java.util.concurrent.Executors;
 
 @RequiredArgsConstructor
 public abstract class AbstractAsynchronousRecordExtractor<I, T> implements RecordExtractor<I, T> {
-    private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
+
+    private static ExecutorService THREAD_POOL;
 
     public static void runAsync(Runnable command) {
+        if (THREAD_POOL == null) {
+            THREAD_POOL = Executors.newCachedThreadPool();
+        }
         CompletableFuture.runAsync(command, THREAD_POOL);
     }
 

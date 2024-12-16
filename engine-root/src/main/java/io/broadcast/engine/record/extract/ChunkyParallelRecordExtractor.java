@@ -11,12 +11,16 @@ import java.util.concurrent.Executors;
 
 @RequiredArgsConstructor
 public class ChunkyParallelRecordExtractor<I, T> implements RecordExtractor<I, T> {
-    private static final ExecutorService PARALLEL_EXECUTOR = Executors.newWorkStealingPool(4);
 
+    private static ExecutorService PARALLEL_EXECUTOR;
     private final ChunkyRecordSelector<I, T> recordSelector;
 
     @Override
     public void extract(@NotNull RecordObserver<I, T> recordObserver) {
+        if (PARALLEL_EXECUTOR == null) {
+            PARALLEL_EXECUTOR = Executors.newWorkStealingPool(4);
+        }
+
         long totalSize = recordSelector.totalSize();
         long chunksSize = recordSelector.chunkSize();
 
