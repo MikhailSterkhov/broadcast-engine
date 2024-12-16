@@ -28,8 +28,15 @@ public class Text {
         private final StringBuilder text = new StringBuilder();
         private final List<MessageEntity> messageEntityList = new ArrayList<>();
 
+        private int currentOffset = 0;
+
         public Builder text(String text) {
-            this.text.append(text);
+            if (text == null || text.isEmpty()) {
+                return this;
+            }
+
+            this.text.append(new String(text.getBytes(StandardCharsets.UTF_16), StandardCharsets.UTF_16));
+            this.currentOffset += text.codePointCount(0, text.length());
             return this;
         }
 
@@ -37,17 +44,20 @@ public class Text {
             return text("\n");
         }
 
-        private MessageEntity addEntityToText(String text, MessageEntity.Type type) {
-            if (text.isEmpty()) {
-                return null;
+        private MessageEntity addEntityToText(String entityText, MessageEntity.Type type) {
+            if (entityText == null || entityText.isEmpty()) {
+                throw new IllegalArgumentException("Entity text cannot be null or empty.");
             }
 
-            int offset = this.text.codePointCount(0, this.text.length());
-            int length = text.codePointCount(0, text.length());
+            int entityLength = entityText.codePointCount(0, entityText.length());
 
-            MessageEntity messageEntity = new MessageEntity(type, offset, offset + length);
+            MessageEntity messageEntity = new MessageEntity(
+                    type,
+                    currentOffset,
+                    entityLength
+            );
+
             messageEntityList.add(messageEntity);
-
             return messageEntity;
         }
 
