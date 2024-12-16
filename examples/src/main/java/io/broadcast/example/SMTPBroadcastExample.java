@@ -5,6 +5,7 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.event.ExceptionListener;
 import io.broadcast.engine.record.Record;
+import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.wrapper.smtp.MailCredentials;
 import io.broadcast.wrapper.smtp.SMTPBroadcastDispatcher;
@@ -37,8 +38,8 @@ public class SMTPBroadcastExample {
 
         PreparedMessage<Integer, String> preparedMessage
                 = PreparedMessage.serialize(
-                (record) -> "<Message-Subject>",
-                (record) -> String.format("Hello, %s! ", record.getId()));
+                        RecordToStringSerializer.single("<Message-Subject>"),
+                        (record) -> String.format("Hello, %s! ", record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new SMTPBroadcastDispatcher<>(smtpMetadata))

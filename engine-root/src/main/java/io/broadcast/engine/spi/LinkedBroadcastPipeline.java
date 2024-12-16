@@ -1,6 +1,7 @@
 package io.broadcast.engine.spi;
 
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
+import io.broadcast.engine.scheduler.Scheduler;
 import lombok.Getter;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.BroadcastPipeline;
@@ -19,6 +20,7 @@ public class LinkedBroadcastPipeline implements BroadcastPipeline {
     private PreparedMessage preparedMessage;
     private BroadcastDispatcher dispatcher = new STDOUTBroadcastDispatcher();
     private RecordExtractor recordExtractor;
+    private Scheduler scheduler = Scheduler.defaultScheduler();
 
     private final Set<BroadcastListener> listeners = new HashSet<>();
 
@@ -37,6 +39,12 @@ public class LinkedBroadcastPipeline implements BroadcastPipeline {
     @Override
     public BroadcastPipeline setRecordExtractor(RecordExtractor recordsExtractor) {
         this.recordExtractor = recordsExtractor;
+        return this;
+    }
+
+    @Override
+    public BroadcastPipeline setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
         return this;
     }
 

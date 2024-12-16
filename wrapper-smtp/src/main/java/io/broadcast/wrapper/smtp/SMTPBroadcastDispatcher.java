@@ -53,7 +53,7 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
             TextMessage textMessage = announcement.getTextMessage();
 
             if (textMessage != null) {
-                message.setSubject(Optional.ofNullable(textMessage.getSubject()).orElse("<No-Subject>"));
+                message.setSubject(Optional.ofNullable(textMessage.getSubject()).orElse("<Non-Subject>"));
                 message.setContent(textMessage.getContent(), "text/html; charset=UTF-8");
             }
 

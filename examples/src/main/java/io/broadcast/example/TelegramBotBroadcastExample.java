@@ -22,8 +22,7 @@ public class TelegramBotBroadcastExample {
 
     public static void main(String[] args) {
         PreparedMessage<Long, String> preparedMessage
-                = PreparedMessage.serializeContent(
-                (record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
+                = PreparedMessage.serializeContent((record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new TelegramBotDispatcher<>(startTelegramBot()))

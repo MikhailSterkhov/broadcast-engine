@@ -33,31 +33,27 @@ public interface PreparedMessage<I, T> {
     @NotNull
     Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record);
 
-    /**
-     * Creates an immutable {@code PreparedMessage} instance with predefined subject and text.
-     *
-     * @param subject The subject of the message. Can be {@code null}.
-     * @param text    The text content of the message. Must not be {@code null}.
-     * @param <I>     The type of the record identifier.
-     * @param <T>     The type of the record entity.
-     * @return A {@link PreparedMessage} instance that always returns the same subject and text.
-     */
     @Contract("_, _ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutable(String subject, String text) {
-        return new ImmutableStringPreparedMessage<>(subject, text);
+    static <I, T> @NotNull PreparedMessage<I, T> immutable(String subject, String content) {
+        return immutable(TextMessage.builder()
+                .subject(subject)
+                .content(content)
+                .build());
     }
 
-    /**
-     * Creates an immutable {@code PreparedMessage} instance with predefined text.
-     *
-     * @param text The text content of the message. Must not be {@code null}.
-     * @param <I>  The type of the record identifier.
-     * @param <T>  The type of the record entity.
-     * @return A {@link PreparedMessage} instance that always returns the given text.
-     */
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutable(String text) {
-        return new ImmutableStringPreparedMessage<>(null, text);
+    static <I, T> @NotNull PreparedMessage<I, T> immutableSubject(String subject) {
+        return immutable(subject, null);
+    }
+
+    @Contract("_ -> new")
+    static <I, T> @NotNull PreparedMessage<I, T> immutableContent(String content) {
+        return immutable(null, content);
+    }
+
+    @Contract("_ -> new")
+    static <I, T> @NotNull PreparedMessage<I, T> immutable(TextMessage textMessage) {
+        return new ImmutableStringPreparedMessage<>(textMessage);
     }
 
     @Contract("_ -> new")

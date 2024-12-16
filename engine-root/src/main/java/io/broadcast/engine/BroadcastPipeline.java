@@ -3,6 +3,7 @@ package io.broadcast.engine;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
+import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.engine.spi.LinkedBroadcastPipeline;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,14 @@ public interface BroadcastPipeline {
     BroadcastPipeline setRecordExtractor(RecordExtractor recordsExtractor);
 
     /**
+     * Sets the {@link Scheduler} responsible for extracting records to be broadcasted.
+     *
+     * @param scheduler The {@link Scheduler} instance. Must not be {@code null}.
+     * @return The current {@code BroadcastPipeline} instance for method chaining.
+     */
+    BroadcastPipeline setScheduler(Scheduler scheduler);
+
+    /**
      * Adds a {@link BroadcastListener} to the pipeline to listen for broadcast events.
      *
      * @param listener The {@link BroadcastListener} to be added. Must not be {@code null}.
@@ -71,6 +80,13 @@ public interface BroadcastPipeline {
      * @return The {@link RecordExtractor} instance. May return {@code null} if not set.
      */
     RecordExtractor getRecordExtractor();
+
+    /**
+     * Retrieves the {@link Scheduler} configured in the pipeline.
+     *
+     * @return The {@link Scheduler} instance. May return {@code null} if not set.
+     */
+    Scheduler getScheduler();
 
     /**
      * Retrieves all {@link BroadcastListener} instances registered in the pipeline.

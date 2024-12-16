@@ -38,8 +38,6 @@ import java.util.function.Consumer;
 public final class BroadcastEngine {
 
     private final BroadcastPipeline pipeline;
-    @Setter
-    private Scheduler scheduler;
 
     /**
      * Initiates the broadcasting process, coordinating record extraction, message preparation,
@@ -52,10 +50,10 @@ public final class BroadcastEngine {
         PreparedMessage preparedMessage = pipeline.getPreparedMessage();
 
         if (recordExtractor == null) {
-            throw new BroadcastEngineException("records-extractor is not initialized");
+            throw new BroadcastEngineException("pipeline.records-extractor is not initialized");
         }
         if (preparedMessage == null) {
-            throw new BroadcastEngineException("prepared-message is not initialized");
+            throw new BroadcastEngineException("pipeline.prepared-message is not initialized");
         }
 
         recordExtractor.extract(record -> {
@@ -88,9 +86,12 @@ public final class BroadcastEngine {
      * @throws IllegalArgumentException if {@code duration} is null.
      */
     public void scheduleBroadcastEverytime(@NotNull Duration duration) {
+        Scheduler scheduler = pipeline.getScheduler();
+
         if (scheduler == null) {
-            scheduler = Scheduler.defaultScheduler();
+            throw new BroadcastEngineException("pipeline.scheduler is not initialized");
         }
+
         scheduler.schedule(duration, this::broadcastNow);
         fireScheduleEvent(duration);
     }

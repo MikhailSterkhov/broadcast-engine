@@ -26,8 +26,7 @@ public class ImmutableRecordsBroadcastExample {
 
     public static void main(String[] args) {
         PreparedMessage<Integer, String> preparedMessage
-                = PreparedMessage.serializeContent(
-                (record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
+                = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())

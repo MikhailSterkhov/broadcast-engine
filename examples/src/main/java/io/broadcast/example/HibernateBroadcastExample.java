@@ -31,8 +31,7 @@ public class HibernateBroadcastExample {
                         .build();
 
         PreparedMessage<Long, Employee> preparedMessage
-                = PreparedMessage.serializeContent(
-                (record) -> String.format("Hello, @%s, your personal id: %d", record.getEntity().getUsername(), record.getId()));
+                = PreparedMessage.serializeContent((record) -> String.format("Hello, @%s, your personal id: %d", record.getEntity().getUsername(), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
@@ -40,7 +39,7 @@ public class HibernateBroadcastExample {
                 .setPreparedMessage(preparedMessage);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
-        broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(15));
+        broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(10));
     }
 
     public static SessionFactory provideSessionFactory() {
