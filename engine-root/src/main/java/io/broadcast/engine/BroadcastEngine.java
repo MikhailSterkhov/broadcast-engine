@@ -1,5 +1,7 @@
 package io.broadcast.engine;
 
+import io.broadcast.engine.announcement.Announcement;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.context.*;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ import java.util.function.Consumer;
  *
  * <p>This class is designed to work with a {@link BroadcastPipeline}, which encapsulates
  * the required components for broadcasting, such as a {@link RecordExtractor},
- * {@link PreparedMessage}, and {@link BroadcastDispatcher}.</p>
+ * {@link AnnouncementExtractor}, and {@link BroadcastDispatcher}.</p>
  *
  * <p>Listeners can subscribe to various events by implementing the {@link BroadcastListener}
  * interface, enabling hooks for specific broadcast lifecycle events.</p>
@@ -47,23 +49,23 @@ public final class BroadcastEngine {
         fireStartEvent();
 
         RecordExtractor recordExtractor = pipeline.getRecordExtractor();
-        PreparedMessage preparedMessage = pipeline.getPreparedMessage();
+        AnnouncementExtractor announcementExtractor = pipeline.getAnnouncementExtractor();
 
         if (recordExtractor == null) {
-            throw new BroadcastEngineException("pipeline.records-extractor is not initialized");
+            throw new BroadcastEngineException("pipeline.recordExtractor is not initialized");
         }
-        if (preparedMessage == null) {
-            throw new BroadcastEngineException("pipeline.prepared-message is not initialized");
+        if (announcementExtractor == null) {
+            throw new BroadcastEngineException("pipeline.announcementExtractor is not initialized");
         }
 
         recordExtractor.extract(record -> {
             fireRecordExtractedEvent(record);
 
-            Announcement announcement = preparedMessage.createAnnouncement(record);
-            firePreparedMessageEvent(announcement);
+            Announcement announcement = announcementExtractor.extractAnnouncement(record);
+            firePreparedMessageEvent(record, announcement);
 
-            if (announcement.hasMessage()) {
-                dispatch0(announcement);
+            if (announcement != null) {
+                dispatch0(record, announcement);
             }
         });
 
@@ -140,11 +142,11 @@ public final class BroadcastEngine {
      *
      * @param announcement The announcement that was dispatched.
      */
-    private void fireDispatchEvent(Announcement announcement) {
+    private void fireDispatchEvent(Record record, Announcement announcement) {
         BroadcastDispatchEventContext eventContext = new BroadcastDispatchEventContext(
-                announcement.getRecord(),
+                record,
                 Instant.now(),
-                announcement.getTextMessage()
+                announcement
         );
         listenEvent(broadcastListener -> broadcastListener.broadcastDispatch(eventContext));
     }
@@ -168,12 +170,12 @@ public final class BroadcastEngine {
      *
      * @param announcement The prepared announcement.
      */
-    private void firePreparedMessageEvent(Announcement announcement) {
+    private void firePreparedMessageEvent(Record record, Announcement announcement) {
         PreparedMessageEventContext eventContext = new PreparedMessageEventContext(
-                announcement.getRecord(),
+                record,
                 Instant.now(),
-                announcement.getTextMessage(),
-                announcement.hasMessage()
+                announcement,
+                announcement != null
         );
         listenEvent(broadcastListener -> broadcastListener.preparedMessage(eventContext));
     }
@@ -184,11 +186,11 @@ public final class BroadcastEngine {
      *
      * @param announcement The announcement to dispatch.
      */
-    private void dispatch0(Announcement announcement) {
+    private void dispatch0(Record record, Announcement announcement) {
         BroadcastDispatcher dispatcher = pipeline.getDispatcher();
-        dispatcher.dispatch(announcement);
+        dispatcher.dispatch(record, announcement);
 
-        fireDispatchEvent(announcement);
+        fireDispatchEvent(record, announcement);
     }
 
     /**
@@ -209,13 +211,14 @@ public final class BroadcastEngine {
      *
      * @param causeCatcher The block of code to execute.
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     private void sneakyThrows(CauseCatcher causeCatcher) {
         try {
             causeCatcher.accept();
         } catch (Throwable throwable) {
             Iterable<BroadcastListener> pipelineListeners = pipeline.getListeners();
             if (!pipelineListeners.iterator().hasNext()) {
-                throw new BroadcastEngineException("Internal broadcast engine error.", throwable);
+                new BroadcastEngineException("Internal broadcast engine error.", throwable).printStackTrace();
             }
             for (BroadcastListener broadcastListener : pipelineListeners) {
                 broadcastListener.throwsException(throwable);

@@ -2,7 +2,8 @@ package io.broadcast.example;
 
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
-import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
+import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
@@ -26,13 +27,13 @@ public class JdbcH2BroadcastExample {
                         .autoCloseable(false)
                         .build();
 
-        PreparedMessage<Integer> preparedMessage
-                = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world, %s!\"", record.getId(), writtenPlayersById.get(record)));
+        AnnouncementExtractor<StringAnnouncement> announcementExtractor
+                = AnnouncementExtractor.constant(new StringAnnouncement("Hello world!"));
 
-        BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
+        BroadcastPipeline<Integer> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallelAsync(new JdbcRecordSelector<>(jdbcRecordMetadata)))
-                .setPreparedMessage(preparedMessage);
+                .setAnnouncementExtractor(announcementExtractor);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
         broadcastEngine.broadcastNow();

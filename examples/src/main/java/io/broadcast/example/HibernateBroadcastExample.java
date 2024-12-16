@@ -2,7 +2,8 @@ package io.broadcast.example;
 
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
-import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
+import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
@@ -34,13 +35,13 @@ public class HibernateBroadcastExample {
                         .sessionFactory(provideSessionFactory())
                         .build();
 
-        PreparedMessage<Long> preparedMessage
-                = PreparedMessage.serializeContent((record) -> String.format("Hello, @%s, your personal id: %d", employeesById.get(record).getUsername(), record.getId()));
+        AnnouncementExtractor<StringAnnouncement> announcementExtractor = AnnouncementExtractor.fromID(Long.class,
+                (id) -> new StringAnnouncement(String.format("Hello, @%s, your personal id: %d", employeesById.get(id).getUsername(), id)));
 
-        BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
+        BroadcastPipeline<Long> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
-                .setPreparedMessage(preparedMessage)
+                .setAnnouncementExtractor(announcementExtractor)
                 .setScheduler(Scheduler.singleThreadScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

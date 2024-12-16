@@ -24,7 +24,7 @@ public class Extractors {
      * @return A {@link RecordExtractor} that provides immutable access to the given records.
      * @throws NullPointerException if {@code recordIterable} is {@code null}.
      */
-    public <I> RecordExtractor<I> immutable(Iterable<Record<I>> recordIterable) {
+    public <I> RecordExtractor<I> constant(Iterable<Record<I>> recordIterable) {
         return new ImmutableRecordExtractor<>(recordIterable);
     }
 
@@ -36,7 +36,7 @@ public class Extractors {
      * @return A {@link RecordExtractor} that fetches records from the supplier on demand.
      * @throws NullPointerException if {@code recordIterableSupplier} is {@code null}.
      */
-    public <I> RecordExtractor<I> supplier(Supplier<Iterable<Record<I>>> recordIterableSupplier) {
+    public <I> RecordExtractor<I> mutable(Supplier<Iterable<Record<I>>> recordIterableSupplier) {
         return new SupplierRecordExtractor<>(recordIterableSupplier);
     }
 
@@ -73,7 +73,7 @@ public class Extractors {
      * @throws NullPointerException if {@code recordIterable} is {@code null}.
      */
     public <I> RecordExtractor<I> immutableAsync(Iterable<Record<I>> recordIterable) {
-        return wrapAsync(immutable(recordIterable));
+        return wrapAsync(constant(recordIterable));
     }
 
     /**
@@ -85,7 +85,7 @@ public class Extractors {
      * @throws NullPointerException if {@code recordIterableSupplier} is {@code null}.
      */
     public <I> RecordExtractor<I> supplierAsync(Supplier<Iterable<Record<I>>> recordIterableSupplier) {
-        return wrapAsync(supplier(recordIterableSupplier));
+        return wrapAsync(mutable(recordIterableSupplier));
     }
 
     /**

@@ -1,10 +1,10 @@
 package io.broadcast.engine;
 
+import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.scheduler.Scheduler;
-import io.broadcast.engine.spi.LinkedBroadcastPipeline;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,16 +17,15 @@ import org.jetbrains.annotations.NotNull;
  * ensure thread safety and proper lifecycle management for the components added
  * to the pipeline.</p>
  */
-@SuppressWarnings("rawtypes")
-public interface BroadcastPipeline {
+public interface BroadcastPipeline<I> {
 
     /**
-     * Sets the {@link PreparedMessage} instance to be used by the pipeline for preparing broadcast messages.
+     * Sets the {@link AnnouncementExtractor} instance to be used by the pipeline for preparing broadcast messages.
      *
-     * @param preparedMessage The {@link PreparedMessage} instance. Must not be {@code null}.
+     * @param announcementExtractor The {@link AnnouncementExtractor} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline setPreparedMessage(PreparedMessage preparedMessage);
+    BroadcastPipeline<I> setAnnouncementExtractor(AnnouncementExtractor<?> announcementExtractor);
 
     /**
      * Sets the {@link BroadcastDispatcher} responsible for dispatching prepared messages.
@@ -34,7 +33,7 @@ public interface BroadcastPipeline {
      * @param dispatcher The {@link BroadcastDispatcher} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline setDispatcher(BroadcastDispatcher dispatcher);
+    BroadcastPipeline<I> setDispatcher(BroadcastDispatcher<I, ?> dispatcher);
 
     /**
      * Sets the {@link RecordExtractor} responsible for extracting records to be broadcasted.
@@ -42,7 +41,7 @@ public interface BroadcastPipeline {
      * @param recordsExtractor The {@link RecordExtractor} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline setRecordExtractor(RecordExtractor recordsExtractor);
+    BroadcastPipeline<I> setRecordExtractor(RecordExtractor<I> recordsExtractor);
 
     /**
      * Sets the {@link Scheduler} responsible for extracting records to be broadcasted.
@@ -50,7 +49,7 @@ public interface BroadcastPipeline {
      * @param scheduler The {@link Scheduler} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline setScheduler(Scheduler scheduler);
+    BroadcastPipeline<I> setScheduler(Scheduler scheduler);
 
     /**
      * Adds a {@link BroadcastListener} to the pipeline to listen for broadcast events.
@@ -58,28 +57,28 @@ public interface BroadcastPipeline {
      * @param listener The {@link BroadcastListener} to be added. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline addListener(BroadcastListener listener);
+    BroadcastPipeline<I> addListener(BroadcastListener listener);
 
     /**
-     * Retrieves the {@link PreparedMessage} configured in the pipeline.
+     * Retrieves the {@link AnnouncementExtractor} configured in the pipeline.
      *
-     * @return The {@link PreparedMessage} instance. May return {@code null} if not set.
+     * @return The {@link AnnouncementExtractor} instance. May return {@code null} if not set.
      */
-    PreparedMessage getPreparedMessage();
+    AnnouncementExtractor<?> getAnnouncementExtractor();
 
     /**
      * Retrieves the {@link BroadcastDispatcher} configured in the pipeline.
      *
      * @return The {@link BroadcastDispatcher} instance. May return {@code null} if not set.
      */
-    BroadcastDispatcher getDispatcher();
+    BroadcastDispatcher<I, ?> getDispatcher();
 
     /**
      * Retrieves the {@link RecordExtractor} configured in the pipeline.
      *
      * @return The {@link RecordExtractor} instance. May return {@code null} if not set.
      */
-    RecordExtractor getRecordExtractor();
+    RecordExtractor<I> getRecordExtractor();
 
     /**
      * Retrieves the {@link Scheduler} configured in the pipeline.
@@ -100,8 +99,18 @@ public interface BroadcastPipeline {
      *
      * @return A new {@link BroadcastPipeline} instance.
      */
+    @Contract("_ -> new")
+    static <I> @NotNull BroadcastPipeline<I> createPipeline(@NotNull Class<I> recordIdType) {
+        return new LinkedBroadcastPipeline<>();
+    }
+
+    /**
+     * Creates a new instance of the default {@code BroadcastPipeline} implementation.
+     *
+     * @return A new {@link BroadcastPipeline} instance.
+     */
     @Contract(" -> new")
-    static @NotNull BroadcastPipeline createPipeline() {
-        return new LinkedBroadcastPipeline();
+    static <I> @NotNull BroadcastPipeline<I> createPipeline() {
+        return new LinkedBroadcastPipeline<>();
     }
 }

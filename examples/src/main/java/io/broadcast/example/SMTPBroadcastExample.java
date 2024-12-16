@@ -2,10 +2,9 @@ package io.broadcast.example;
 
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
-import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
+import io.broadcast.engine.announcement.ContentedAnnouncement;
 import io.broadcast.engine.event.ExceptionListener;
-import io.broadcast.engine.record.Record;
-import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
@@ -14,9 +13,6 @@ import io.broadcast.wrapper.smtp.SMTPBroadcastDispatcher;
 import io.broadcast.wrapper.smtp.SMTPMetadata;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SMTPBroadcastExample {
 
@@ -36,15 +32,17 @@ public class SMTPBroadcastExample {
                 .smtpPort("465")
                 .build();
 
-        PreparedMessage<String> preparedMessage
-                = PreparedMessage.serialize(
-                        RecordToStringSerializer.single("<Message-Subject>"),
-                        (record) -> String.format("Hello, %s! ", record.getId()));
+        AnnouncementExtractor<ContentedAnnouncement<String>> announcementExtractor
+                = AnnouncementExtractor.fromID(String.class, (id) ->
+                new ContentedAnnouncement<>(
+                        "<Message-Subject>",
+                        String.format("Hello, %s! ", id)
+                ));
 
-        BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
+        BroadcastPipeline<String> broadcastPipeline = BroadcastPipeline.createPipeline(String.class)
                 .setDispatcher(new SMTPBroadcastDispatcher(smtpMetadata))
-                .setRecordExtractor(Extractors.immutable(IMMUTABLE_RECORDS.toRecordsSet()))
-                .setPreparedMessage(preparedMessage)
+                .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+                .setAnnouncementExtractor(announcementExtractor)
                 .addListener(new ExceptionListener() {
                     @Override
                     public void throwsException(Throwable throwable) {

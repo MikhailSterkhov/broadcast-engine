@@ -1,6 +1,6 @@
 package io.broadcast.engine.event.context;
 
-import io.broadcast.engine.TextMessage;
+import io.broadcast.engine.announcement.Announcement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,6 @@ public class PreparedMessageEventContext {
 
     private final Record<?> record;
     private final Instant instant;
-    private final TextMessage textMessage;
+    private final Announcement announcement;
     private final boolean isPrepared;
 }

@@ -6,37 +6,43 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Update;
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
-import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.dispatch.ComplexBroadcastDispatcher;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.Record;
-import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.telegram.TelegramBotDispatcher;
+import io.broadcast.wrapper.telegram.objects.TelegramMessage;
+import io.broadcast.wrapper.telegram.objects.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
 
 public class TelegramBotBroadcastExample {
 
     private static final RecordsMap<Long, String> telegramUsersById = RecordsMap.newHashMap();
 
     public static void main(String[] args) {
-        PreparedMessage<Long> preparedMessage
-                = PreparedMessage.serialize(
-                        RecordToStringSerializer.single("Announcement"),
-                        (record) -> String.format("Hello, @%s, your telegram-id: %d", telegramUsersById.get(record), record.getId()));
+        AnnouncementExtractor<TelegramMessage> telegramMessageExtractor
+                = AnnouncementExtractor.fromID(Long.class, (telegramUserID) ->
+                TelegramMessage.builder()
+                        .text(Text.builder()
+                                .text("Hello, your current telegram account ID: " + telegramUserID)
+                                .newline()
+                                .text(" - Your detected username: @" + telegramUsersById.get(telegramUserID))
+                                .newline()
+                                .text("Please,").bold(" subscribe at bot ").text("or our email: ")
+                                .email("itzstonlex@yandex.ru")
+                                .build())
+                        .build());
 
-        BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
+        BroadcastPipeline<Long> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class)
                 .setDispatcher(ComplexBroadcastDispatcher.complex(
                         new TelegramBotDispatcher(startTelegramBot()),
                         new STDOUTBroadcastDispatcher<>()))
-                .setRecordExtractor(Extractors.supplier(telegramUsersById::toRecordsSet))
-                .setPreparedMessage(preparedMessage)
+                .setRecordExtractor(Extractors.mutable(telegramUsersById::toRecordsSet))
+                .setAnnouncementExtractor(telegramMessageExtractor)
                 .setScheduler(Scheduler.threadScheduler(2));
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
@@ -44,7 +50,7 @@ public class TelegramBotBroadcastExample {
     }
 
     private static @NotNull TelegramBot startTelegramBot() {
-        TelegramBot telegramBot = new TelegramBot("<your-telegram-bot-token>");
+        TelegramBot telegramBot = new TelegramBot("7993857695:AAGRnzL0LcbnTcTvviXQVDr8YvDE5zhnuBc");
         telegramBot.setUpdatesListener(updates -> {
 
             for (Update update : updates) {

@@ -8,10 +8,14 @@ import lombok.ToString;
 
 @Getter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @RequiredArgsConstructor
-public class RecordedAnnouncement<I, V> implements Announcement {
+public class AnnouncementAndID<I, T> extends DecoratedAnnouncement {
     
-    private final Record<I> record;
-    private final V message;
+    private final I id;
+    private final T message;
+
+    public Record<I> createRecord() {
+        return new Record<>(id);
+    }
 }
