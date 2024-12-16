@@ -2,7 +2,7 @@
   <img src=".assets/broadcast.png" alt="broadcast" width="250"/>
   <br>
   <img src="https://img.shields.io/badge/language-Java-magenta?style=flat" />
-  <img src="https://img.shields.io/badge/release-v1.0.0-magenta?style=flat" />
+  <img src="https://img.shields.io/badge/release-v1.0.1-magenta?style=flat" />
   <img src="https://img.shields.io/badge/repository-jitpack.io-magenta?style=flat" />
   <img src="https://img.shields.io/badge/license-MIT-magenta?style=flat" />
 </div>
@@ -54,8 +54,7 @@ private static final Set<Record<Integer, String>> SINGLETON_RECORDS =
 
 public BroadcastEngine createEngine() {
     PreparedMessage<Integer, String> preparedMessage
-            = PreparedMessage.func(
-            (record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
+            = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
 
     BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
             .setDispatcher(new STDOUTBroadcastDispatcher<>())
@@ -105,12 +104,12 @@ broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
 The library also provides a set of its own pre-packaged tools 
 to facilitate the realization of common business tasks
 
-| Name      | Artifact ID                  | Version | API Usage                                                                                          |
-|-----------|------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.0   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))`  |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.0   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new JdbcRecordSelector<>(metadata)))`       |
-| Mailing   | `social-broadcast-smtp`      | 1.0.0   | `pipeline.setDispatcher(new SMTPBroadcastDispatcher<>(metadata))`                                  |
-| Telegram  | `social-broadcast-telegram`  | 1.0.0   | `pipeline.setDispatcher(new TelegramBotDispatcher<>("<bot-api-token>"))`                           |
+| Name      | Artifact ID                  | Version | API Usage                                                                                                        |
+|-----------|------------------------------|---------|------------------------------------------------------------------------------------------------------------------|
+| Hibernate | `social-broadcast-hibernate` | 1.0.1   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(hibernateRecordMetadata)))` |
+| JDBC      | `social-broadcast-jdbc`      | 1.0.1   | `pipeline.setRecordExtractor(Extractors.chunkyParallel(new JdbcRecordSelector<>(jdbcRecordMetadata)))`           |
+| Mailing   | `social-broadcast-smtp`      | 1.0.1   | `pipeline.setDispatcher(new SMTPBroadcastDispatcher<>(smtpMetadata))`                                            |
+| Telegram  | `social-broadcast-telegram`  | 1.0.1   | `pipeline.setDispatcher(new TelegramBotDispatcher<>("<bot-api-token>"))`                                         |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
@@ -160,7 +159,7 @@ Dependency:
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
     <artifactId>social-broadcast-engine</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -178,5 +177,5 @@ repositories {
 Dependency:
 
 ```groovy
-implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.0'
+implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.1'
 ```

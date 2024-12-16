@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.mikhailsterkhov</groupId>
         <artifactId>social-broadcast-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>social-broadcast-examples</artifactId>
@@ -23,28 +23,28 @@
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-engine</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-hibernate</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-jdbc</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-smtp</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-telegram</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <!-- Database Connection Drivers dependencies -->
