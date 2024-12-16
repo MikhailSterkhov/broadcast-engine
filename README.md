@@ -44,22 +44,22 @@ happens with the main component of the library - `BroadcastEngine` -
 let's consider its initialization on the following example:
 
 ```java
-private static final Set<Record<Integer, String>> SINGLETON_RECORDS =
-        Set.of(
-                Record.ofInt("Flora", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("John", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("Mark", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("Andrey", (s) -> ThreadLocalRandom.current().nextInt())
-        );
+private static final String[] NAMES = {"Flora", "John", "Mark", "Andrey"};
+
+private static final RecordsMap<Integer, String> IMMUTABLE_RECORDS =
+        RecordsMap.<Integer, String>builderHashMap()
+                .putStream(Arrays.asList(10, 20, 30, 40), idNumber -> NAMES[(idNumber / 10) - 1])
+                .build();
 
 public BroadcastEngine createEngine() {
-    PreparedMessage<Integer, String> preparedMessage
-            = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
+    AnnouncementExtractor<StringAnnouncement> announcementExtractor =
+            AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
-    BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
-            .setDispatcher(new STDOUTBroadcastDispatcher<>())
-            .setRecordExtractor(Extractors.immutable(SINGLETON_RECORDS))
-            .setPreparedMessage(preparedMessage);
+    BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
+            .setDispatcher(new STDOUTBroadcastDispatcher<>()) // optional
+            .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+            .setAnnouncementExtractor(announcementExtractor)
+            .setScheduler(Scheduler.threadScheduler(2)); // optional
     
     return new BroadcastEngine(broadcastPipeline);
 }
