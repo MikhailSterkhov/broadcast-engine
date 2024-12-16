@@ -4,6 +4,8 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
+import io.broadcast.engine.event.BroadcastEventAdapter;
+import io.broadcast.engine.event.context.*;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
 import io.broadcast.wrapper.hibernate.HibernateRecordMetadata;
@@ -31,13 +33,25 @@ public class HibernateBroadcastExample {
                         .build();
 
         PreparedMessage<Long, Employee> preparedMessage
-                = PreparedMessage.serializeContent(
+                = PreparedMessage.func(
                 (record) -> String.format("Hello, @%s, your personal id: %d", record.getEntity().getUsername(), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
-                .setPreparedMessage(preparedMessage);
+                .setPreparedMessage(preparedMessage)
+                .addListener(new BroadcastEventAdapter() {
+
+                    @Override
+                    public void broadcastStart(BroadcastStartEventContext eventContext) {
+                        System.out.println(eventContext);
+                    }
+
+                    @Override
+                    public void broadcastEnd(BroadcastEndEventContext eventContext) {
+                        System.out.println(eventContext);
+                    }
+                });
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
         broadcastEngine.scheduleBroadcastEverytime(Duration.ofSeconds(15));

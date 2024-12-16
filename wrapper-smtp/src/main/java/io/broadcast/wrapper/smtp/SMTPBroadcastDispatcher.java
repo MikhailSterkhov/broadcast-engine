@@ -1,7 +1,6 @@
 package io.broadcast.wrapper.smtp;
 
 import io.broadcast.engine.Announcement;
-import io.broadcast.engine.TextMessage;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -49,13 +48,8 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
 
             message.setFrom(new InternetAddress(smtpMetadata.getSenderCredentials().getEmail()));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(announcement.getRecord().getId()));
-
-            TextMessage textMessage = announcement.getTextMessage();
-
-            if (textMessage != null) {
-                message.setSubject(Optional.ofNullable(textMessage.getSubject()).orElse("<No-Subject>"));
-                message.setContent(textMessage.getContent(), "text/html; charset=UTF-8");
-            }
+            message.setSubject(Optional.ofNullable(announcement.getSubject()).orElse("<No-Subject>"));
+            message.setContent(announcement.getPreparedText(), "text/html; charset=UTF-8");
 
             Transport.send(message);
 

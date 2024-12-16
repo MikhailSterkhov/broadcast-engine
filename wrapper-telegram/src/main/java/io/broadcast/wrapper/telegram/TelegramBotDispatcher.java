@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import io.broadcast.engine.Announcement;
-import io.broadcast.engine.TextMessage;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,10 +25,9 @@ public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
 
     @Override
     public void dispatch(@NotNull Announcement<Long, T> announcement) {
-        TextMessage textMessage = announcement.getTextMessage();
         SendResponse sendResponse = telegramBot.execute(new SendMessage(
                 announcement.getRecord().getId(),
-                textMessage.getSubject()));
+                announcement.getPreparedText()));
 
         if (!sendResponse.isOk()) {
             int errorCode = sendResponse.errorCode();
