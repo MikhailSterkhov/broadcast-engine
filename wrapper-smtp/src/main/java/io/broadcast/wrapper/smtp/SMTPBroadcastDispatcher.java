@@ -1,8 +1,8 @@
 package io.broadcast.wrapper.smtp;
 
-import io.broadcast.engine.Announcement;
-import io.broadcast.engine.TextMessage;
+import io.broadcast.engine.announcement.ContentedAnnouncement;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
+import io.broadcast.engine.record.Record;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 @RequiredArgsConstructor
-public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T> {
+public class SMTPBroadcastDispatcher implements BroadcastDispatcher<String, ContentedAnnouncement<String>> {
 
     private final SMTPMetadata smtpMetadata;
     private Session session;
@@ -40,7 +40,7 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
     }
 
     @Override
-    public void dispatch(@NotNull Announcement<String, T> announcement) {
+    public void dispatch(@NotNull Record<String> record, @NotNull ContentedAnnouncement<String> announcement) {
         if (session == null) {
             session = createMailSession();
         }
@@ -48,18 +48,12 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
             Message message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress(smtpMetadata.getSenderCredentials().getEmail()));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(announcement.getRecord().getId()));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(record.getId()));
 
-            TextMessage textMessage = announcement.getTextMessage();
-
-            if (textMessage != null) {
-                message.setSubject(Optional.ofNullable(textMessage.getSubject()).orElse("<Non-Subject>"));
-                message.setContent(textMessage.getContent(), "text/html; charset=UTF-8");
-            }
+            message.setSubject(Optional.ofNullable(announcement.getSubject()).orElse("<Non-Subject>"));
+            message.setContent(announcement.getContent(), "text/html; charset=UTF-8");
 
             Transport.send(message);
-
-            System.out.println("пошло пошло");
         } catch (MessagingException exception) {
             throw new BroadcastSMTPException("Failed to send SMTP message", exception);
         }

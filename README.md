@@ -2,7 +2,7 @@
   <img src=".assets/broadcast.png" alt="broadcast" width="250"/>
   <br>
   <img src="https://img.shields.io/badge/language-Java-magenta?style=flat" />
-  <img src="https://img.shields.io/badge/release-v1.0.1-magenta?style=flat" />
+  <img src="https://img.shields.io/badge/release-v1.0.2-magenta?style=flat" />
   <img src="https://img.shields.io/badge/repository-jitpack.io-magenta?style=flat" />
   <img src="https://img.shields.io/badge/license-MIT-magenta?style=flat" />
 </div>
@@ -44,22 +44,22 @@ happens with the main component of the library - `BroadcastEngine` -
 let's consider its initialization on the following example:
 
 ```java
-private static final Set<Record<Integer, String>> SINGLETON_RECORDS =
-        Set.of(
-                Record.ofInt("Flora", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("John", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("Mark", (s) -> ThreadLocalRandom.current().nextInt()), 
-                Record.ofInt("Andrey", (s) -> ThreadLocalRandom.current().nextInt())
-        );
+private static final String[] NAMES = {"Flora", "John", "Mark", "Andrey"};
+
+private static final RecordsMap<Integer, String> IMMUTABLE_RECORDS =
+        RecordsMap.<Integer, String>builderHashMap()
+                .putStream(Arrays.asList(10, 20, 30, 40), idNumber -> NAMES[(idNumber / 10) - 1])
+                .build();
 
 public BroadcastEngine createEngine() {
-    PreparedMessage<Integer, String> preparedMessage
-            = PreparedMessage.serializeContent((record) -> String.format("[ID: %s] -> \"Hello world!\"", record.getId()));
+    AnnouncementExtractor<StringAnnouncement> announcementExtractor =
+            AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
-    BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
-            .setDispatcher(new STDOUTBroadcastDispatcher<>())
-            .setRecordExtractor(Extractors.immutable(SINGLETON_RECORDS))
-            .setPreparedMessage(preparedMessage);
+    BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
+            .setDispatcher(new STDOUTBroadcastDispatcher<>()) // optional
+            .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+            .setAnnouncementExtractor(announcementExtractor)
+            .setScheduler(Scheduler.threadScheduler(2)); // optional
     
     return new BroadcastEngine(broadcastPipeline);
 }
@@ -106,10 +106,10 @@ to facilitate the realization of common business tasks
 
 | Name      | Artifact ID                  | Version | API Usage                                                                                          |
 |-----------|------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
-| Mailing   | `social-broadcast-smtp`      | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
-| Telegram  | `social-broadcast-telegram`  | 1.0.1   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Hibernate | `social-broadcast-hibernate` | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
+| JDBC      | `social-broadcast-jdbc`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
+| Mailing   | `social-broadcast-smtp`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
+| Telegram  | `social-broadcast-telegram`  | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
@@ -159,7 +159,7 @@ Dependency:
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
     <artifactId>social-broadcast-engine</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -177,5 +177,5 @@ repositories {
 Dependency:
 
 ```groovy
-implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.1'
+implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.2'
 ```

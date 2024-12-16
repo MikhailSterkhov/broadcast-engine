@@ -9,13 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class JdbcRecordSelector<I, T> implements ChunkyRecordSelector<I, T> {
+public class JdbcRecordSelector<I> implements ChunkyRecordSelector<I> {
 
-    private final JdbcRecordMetadata<I, T> metadata;
+    private final JdbcRecordMetadata metadata;
 
     @Override
     public long totalSize() {
@@ -53,12 +52,11 @@ public class JdbcRecordSelector<I, T> implements ChunkyRecordSelector<I, T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Iterable<Record<I, T>> select(long index) {
+    public Iterable<Record<I>> select(long index) {
         Connection connection = metadata.getConnection();
-        JdbcEntityFactory<I, T> jdbcEntityFactory = metadata.getJdbcEntityFactory();
 
         String sql = String.format("SELECT %s FROM %s LIMIT %s OFFSET %s",
-                jdbcEntityFactory == null ? metadata.getIdColumn() : "*",
+                metadata.getIdColumn(),
                 metadata.getTable(),
                 chunkSize(),
                 chunkSize() * index);
@@ -66,17 +64,10 @@ public class JdbcRecordSelector<I, T> implements ChunkyRecordSelector<I, T> {
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
 
-            Set<Record<I, T>> selectionSet = new HashSet<>();
+            Set<Record<I>> selectionSet = new HashSet<>();
 
             while (resultSet.next()) {
-                I id = (I) resultSet.getObject(1);
-                T entity = null;
-
-                if (jdbcEntityFactory != null) {
-                    entity = jdbcEntityFactory.create(id, resultSet);
-                }
-
-                selectionSet.add(new Record<>(id, entity));
+                selectionSet.add(new Record<>((I) resultSet.getObject(1)));
             }
 
             return selectionSet;

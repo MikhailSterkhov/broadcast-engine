@@ -4,14 +4,13 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.MessageEntity;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
-import io.broadcast.engine.Announcement;
-import io.broadcast.engine.TextMessage;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
+import io.broadcast.engine.record.Record;
+import io.broadcast.wrapper.telegram.objects.TelegramMessage;
+import io.broadcast.wrapper.telegram.objects.Text;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
-public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
+public class TelegramBotDispatcher implements BroadcastDispatcher<Long, TelegramMessage> {
 
     private final TelegramBot telegramBot;
 
@@ -28,16 +27,16 @@ public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
     }
 
     @Override
-    public void dispatch(@NotNull Announcement<Long, T> announcement) {
-        SendMessage messageRequest = createSendMessageRequest(
-                announcement.getRecord().getId(),
-                announcement.getTextMessage());
-
-        if (messageRequest == null) {
+    public void dispatch(@NotNull Record<Long> record, @NotNull TelegramMessage announcement) {
+        Text text = announcement.getText();
+        if (text == null) {
             return;
         }
 
-        SendResponse sendResponse = telegramBot.execute(messageRequest);
+        SendMessage sendMessageRequest = new SendMessage(record.getId(), text.getText())
+                .entities(text.getMessageEntityList().toArray(new MessageEntity[0]));
+
+        SendResponse sendResponse = telegramBot.execute(sendMessageRequest);
 
         if (!sendResponse.isOk()) {
             int errorCode = sendResponse.errorCode();
@@ -45,24 +44,5 @@ public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
 
             throw new BroadcastTelegramBotException("Failed dispatch message to telegram bot [errorCode=" + errorCode + ", description=" + description + "]");
         }
-    }
-
-    private SendMessage createSendMessageRequest(long chatID, TextMessage textMessage) {
-        if (textMessage == null || textMessage.getContent() == null) {
-            return null;
-        }
-
-        String subjectString = Optional.of(textMessage).map(TextMessage::getSubject).orElse("");
-        String contentString = textMessage.getContent();
-
-        String messageString = (subjectString + "\n" + contentString);
-
-        SendMessage sendMessage = new SendMessage(chatID, messageString);
-
-        if (textMessage.hasSubject()) {
-            sendMessage = sendMessage.entities(
-                    new MessageEntity(MessageEntity.Type.bold, 0, textMessage.getSubject().length()));
-        }
-        return sendMessage;
     }
 }

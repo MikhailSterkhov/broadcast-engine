@@ -10,7 +10,7 @@ package io.broadcast.engine.record;
  * @param <I> The type of the identifier used in the records.
  * @param <T> The type of the entity associated with the records.
  */
-public interface ChunkyRecordSelector<I, T> {
+public interface ChunkyRecordSelector<I> {
 
     /**
      * Returns the total number of records available.
@@ -33,5 +33,5 @@ public interface ChunkyRecordSelector<I, T> {
      * @return An {@link Iterable} containing the records in the specified chunk.
      * @throws IllegalArgumentException if the {@code index} is negative or exceeds the total number of chunks.
      */
-    Iterable<Record<I, T>> select(long index);
+    Iterable<Record<I>> select(long index);
 }

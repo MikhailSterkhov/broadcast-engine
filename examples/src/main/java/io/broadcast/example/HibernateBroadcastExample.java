@@ -2,9 +2,11 @@ package io.broadcast.example;
 
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
-import io.broadcast.engine.PreparedMessage;
+import io.broadcast.engine.announcement.AnnouncementExtractor;
+import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
 import io.broadcast.wrapper.hibernate.HibernateRecordMetadata;
@@ -23,6 +25,8 @@ import java.time.Duration;
 
 public class HibernateBroadcastExample {
 
+    private static final RecordsMap<Long, Employee> employeesById = RecordsMap.newHashMap();
+
     public static void main(String[] args) {
         HibernateRecordMetadata<Employee> metadata =
                 HibernateRecordMetadata.<Employee>builder()
@@ -31,13 +35,13 @@ public class HibernateBroadcastExample {
                         .sessionFactory(provideSessionFactory())
                         .build();
 
-        PreparedMessage<Long, Employee> preparedMessage
-                = PreparedMessage.serializeContent((record) -> String.format("Hello, @%s, your personal id: %d", record.getEntity().getUsername(), record.getId()));
+        AnnouncementExtractor<StringAnnouncement> announcementExtractor = AnnouncementExtractor.fromID(Long.class,
+                (id) -> new StringAnnouncement(String.format("Hello, @%s, your personal id: %d", employeesById.get(id).getUsername(), id)));
 
-        BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
+        BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
-                .setPreparedMessage(preparedMessage)
+                .setAnnouncementExtractor(announcementExtractor)
                 .setScheduler(Scheduler.singleThreadScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
@@ -58,7 +62,11 @@ public class HibernateBroadcastExample {
                 for (int i = 0; i < 100; i++) {
 
                     String username = RandomString.make(16);
-                    session.persist(new Employee(username));
+                    session.persist("Employee", new Employee(username));
+
+                    Employee employee = session.find(Employee.class, i + 1);
+
+                    employeesById.put(employee.getId(), employee);
                 }
 
                 transaction.commit();

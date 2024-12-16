@@ -6,12 +6,12 @@ import io.broadcast.engine.record.RecordObserver;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
-public class ImmutableRecordExtractor<I, T> implements RecordExtractor<I, T> {
+public class ImmutableRecordExtractor<I> implements RecordExtractor<I> {
 
-    private final Iterable<Record<I, T>> recordIterable;
+    private final Iterable<Record<I>> recordIterable;
 
     @Override
-    public void extract(@NotNull RecordObserver<I, T> recordObserver) {
+    public void extract(@NotNull RecordObserver<I> recordObserver) {
         recordIterable.forEach(recordObserver::observe);
     }
 }

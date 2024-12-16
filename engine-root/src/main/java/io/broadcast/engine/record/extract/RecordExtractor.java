@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> The type of the entity associated with the records.
  */
 @FunctionalInterface
-public interface RecordExtractor<I, T> {
+public interface RecordExtractor<I> {
 
     /**
      * Extracts records and passes them to the specified {@link RecordObserver} for processing.
@@ -22,5 +22,5 @@ public interface RecordExtractor<I, T> {
      * @param recordObserver The observer that will process the extracted records. Must not be {@code null}.
      * @throws NullPointerException if {@code recordObserver} is {@code null}.
      */
-    void extract(@NotNull RecordObserver<I, T> recordObserver);
+    void extract(@NotNull RecordObserver<I> recordObserver);
 }

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> The type of the entity in the observed record.
  */
 @FunctionalInterface
-public interface RecordObserver<I, T> {
+public interface RecordObserver<I> {
 
     /**
      * Observes the given {@link Record}.
@@ -32,5 +32,5 @@ public interface RecordObserver<I, T> {
      * @param record The record to be observed. Must not be {@code null}.
      * @throws NullPointerException if {@code record} is {@code null}.
      */
-    void observe(@NotNull Record<I, T> record);
+    void observe(@NotNull Record<I> record);
 }

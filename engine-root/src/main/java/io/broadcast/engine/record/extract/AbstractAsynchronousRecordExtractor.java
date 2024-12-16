@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RequiredArgsConstructor
-public abstract class AbstractAsynchronousRecordExtractor<I, T> implements RecordExtractor<I, T> {
+public abstract class AbstractAsynchronousRecordExtractor<I> implements RecordExtractor<I> {
 
     private static ExecutorService THREAD_POOL;
 
@@ -20,10 +20,10 @@ public abstract class AbstractAsynchronousRecordExtractor<I, T> implements Recor
         CompletableFuture.runAsync(command, THREAD_POOL);
     }
 
-    public abstract void extractAsync(@NotNull RecordObserver<I, T> recordObserver);
+    public abstract void extractAsync(@NotNull RecordObserver<I> recordObserver);
 
     @Override
-    public final void extract(@NotNull RecordObserver<I, T> recordObserver) {
+    public final void extract(@NotNull RecordObserver<I> recordObserver) {
         runAsync(() -> extractAsync(recordObserver));
     }
 }
