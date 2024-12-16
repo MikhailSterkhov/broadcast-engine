@@ -35,13 +35,13 @@ class WrappedInternalRecordsMap<K, V> implements RecordsMap<K, V>, RecordsMap.Ma
     @Override
     public RecordsMap<K, V> merge(RecordsMap<K, V> other) {
         internal.putAll(other.toMap());
-        return null;
+        return this;
     }
 
     @Override
     public WrappedInternalRecordsMap<K, V> put(Record<K> key, V value) {
         internal.put(key, value);
-        return null;
+        return this;
     }
 
     @Override

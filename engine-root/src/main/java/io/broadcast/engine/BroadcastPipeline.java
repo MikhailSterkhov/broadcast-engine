@@ -1,6 +1,8 @@
 package io.broadcast.engine;
 
+import io.broadcast.engine.announcement.Announcement;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
+import io.broadcast.engine.announcement.ContentedAnnouncement;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
@@ -17,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * ensure thread safety and proper lifecycle management for the components added
  * to the pipeline.</p>
  */
-public interface BroadcastPipeline<I> {
+public interface BroadcastPipeline<I, A extends Announcement> {
 
     /**
      * Sets the {@link AnnouncementExtractor} instance to be used by the pipeline for preparing broadcast messages.
@@ -25,7 +27,7 @@ public interface BroadcastPipeline<I> {
      * @param announcementExtractor The {@link AnnouncementExtractor} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline<I> setAnnouncementExtractor(AnnouncementExtractor<?> announcementExtractor);
+    BroadcastPipeline<I, A> setAnnouncementExtractor(AnnouncementExtractor<A> announcementExtractor);
 
     /**
      * Sets the {@link BroadcastDispatcher} responsible for dispatching prepared messages.
@@ -33,7 +35,7 @@ public interface BroadcastPipeline<I> {
      * @param dispatcher The {@link BroadcastDispatcher} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline<I> setDispatcher(BroadcastDispatcher<I, ?> dispatcher);
+    BroadcastPipeline<I, A> setDispatcher(BroadcastDispatcher<I, A> dispatcher);
 
     /**
      * Sets the {@link RecordExtractor} responsible for extracting records to be broadcasted.
@@ -41,7 +43,7 @@ public interface BroadcastPipeline<I> {
      * @param recordsExtractor The {@link RecordExtractor} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline<I> setRecordExtractor(RecordExtractor<I> recordsExtractor);
+    BroadcastPipeline<I, A> setRecordExtractor(RecordExtractor<I> recordsExtractor);
 
     /**
      * Sets the {@link Scheduler} responsible for extracting records to be broadcasted.
@@ -49,7 +51,7 @@ public interface BroadcastPipeline<I> {
      * @param scheduler The {@link Scheduler} instance. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline<I> setScheduler(Scheduler scheduler);
+    BroadcastPipeline<I, A> setScheduler(Scheduler scheduler);
 
     /**
      * Adds a {@link BroadcastListener} to the pipeline to listen for broadcast events.
@@ -57,14 +59,14 @@ public interface BroadcastPipeline<I> {
      * @param listener The {@link BroadcastListener} to be added. Must not be {@code null}.
      * @return The current {@code BroadcastPipeline} instance for method chaining.
      */
-    BroadcastPipeline<I> addListener(BroadcastListener listener);
+    BroadcastPipeline<I, A> addListener(BroadcastListener listener);
 
     /**
      * Retrieves the {@link AnnouncementExtractor} configured in the pipeline.
      *
      * @return The {@link AnnouncementExtractor} instance. May return {@code null} if not set.
      */
-    AnnouncementExtractor<?> getAnnouncementExtractor();
+    AnnouncementExtractor<A> getAnnouncementExtractor();
 
     /**
      * Retrieves the {@link BroadcastDispatcher} configured in the pipeline.
@@ -99,8 +101,18 @@ public interface BroadcastPipeline<I> {
      *
      * @return A new {@link BroadcastPipeline} instance.
      */
-    @Contract("_ -> new")
-    static <I> @NotNull BroadcastPipeline<I> createPipeline(@NotNull Class<I> recordIdType) {
+    @Contract("_, _ -> new")
+    static <I, T> @NotNull BroadcastPipeline<I, ContentedAnnouncement<T>> createContentedPipeline(@NotNull Class<I> recordIdType, @NotNull Class<T> announcementType) {
+        return new LinkedBroadcastPipeline<>();
+    }
+
+    /**
+     * Creates a new instance of the default {@code BroadcastPipeline} implementation.
+     *
+     * @return A new {@link BroadcastPipeline} instance.
+     */
+    @Contract("_, _ -> new")
+    static <I, A extends Announcement> @NotNull BroadcastPipeline<I, A> createPipeline(@NotNull Class<I> recordIdType, @NotNull Class<A> announcementType) {
         return new LinkedBroadcastPipeline<>();
     }
 
@@ -110,7 +122,7 @@ public interface BroadcastPipeline<I> {
      * @return A new {@link BroadcastPipeline} instance.
      */
     @Contract(" -> new")
-    static <I> @NotNull BroadcastPipeline<I> createPipeline() {
+    static <I, A extends Announcement> @NotNull BroadcastPipeline<I, A> createPipeline() {
         return new LinkedBroadcastPipeline<>();
     }
 }

@@ -30,7 +30,7 @@ public class JdbcH2BroadcastExample {
         AnnouncementExtractor<StringAnnouncement> announcementExtractor
                 = AnnouncementExtractor.constant(new StringAnnouncement("Hello world!"));
 
-        BroadcastPipeline<Integer> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class)
+        BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallelAsync(new JdbcRecordSelector<>(jdbcRecordMetadata)))
                 .setAnnouncementExtractor(announcementExtractor);

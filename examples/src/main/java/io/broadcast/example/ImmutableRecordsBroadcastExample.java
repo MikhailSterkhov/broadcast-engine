@@ -23,7 +23,7 @@ public class ImmutableRecordsBroadcastExample {
         AnnouncementExtractor<StringAnnouncement> announcementExtractor =
                 AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
-        BroadcastPipeline<Integer> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class)
+        BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor);

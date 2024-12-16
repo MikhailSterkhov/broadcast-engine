@@ -39,7 +39,7 @@ public class SMTPBroadcastExample {
                         String.format("Hello, %s! ", id)
                 ));
 
-        BroadcastPipeline<String> broadcastPipeline = BroadcastPipeline.createPipeline(String.class)
+        BroadcastPipeline<String, ContentedAnnouncement<String>> broadcastPipeline = BroadcastPipeline.createContentedPipeline(String.class, String.class)
                 .setDispatcher(new SMTPBroadcastDispatcher(smtpMetadata))
                 .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor)
@@ -52,6 +52,8 @@ public class SMTPBroadcastExample {
                 .setScheduler(Scheduler.defaultScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
+
+        broadcastEngine.broadcastNow();
         broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
     }
 }

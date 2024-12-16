@@ -5,14 +5,12 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Update;
 import io.broadcast.engine.BroadcastEngine;
-import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
-import io.broadcast.engine.dispatch.ComplexBroadcastDispatcher;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
-import io.broadcast.wrapper.telegram.TelegramBotDispatcher;
+import io.broadcast.wrapper.telegram.TelegramBroadcastPipeline;
 import io.broadcast.wrapper.telegram.objects.TelegramMessage;
 import io.broadcast.wrapper.telegram.objects.Text;
 import org.jetbrains.annotations.NotNull;
@@ -37,10 +35,8 @@ public class TelegramBotBroadcastExample {
                                 .build())
                         .build());
 
-        BroadcastPipeline<Long> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class)
-                .setDispatcher(ComplexBroadcastDispatcher.complex(
-                        new TelegramBotDispatcher(startTelegramBot()),
-                        new STDOUTBroadcastDispatcher<>()))
+        TelegramBroadcastPipeline broadcastPipeline = new TelegramBroadcastPipeline(startTelegramBot())
+                .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.mutable(telegramUsersById::toRecordsSet))
                 .setAnnouncementExtractor(telegramMessageExtractor)
                 .setScheduler(Scheduler.threadScheduler(2));
@@ -50,7 +46,7 @@ public class TelegramBotBroadcastExample {
     }
 
     private static @NotNull TelegramBot startTelegramBot() {
-        TelegramBot telegramBot = new TelegramBot("7993857695:AAGRnzL0LcbnTcTvviXQVDr8YvDE5zhnuBc");
+        TelegramBot telegramBot = new TelegramBot("<your-telegram-bot-token>");
         telegramBot.setUpdatesListener(updates -> {
 
             for (Update update : updates) {

@@ -5,7 +5,6 @@ import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.context.*;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.extract.RecordExtractor;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
  * Additionally, it provides event-driven mechanisms to notify listeners about key stages
  * of the broadcast lifecycle and supports scheduling periodic broadcasts.
  *
- * <p>This class is designed to work with a {@link BroadcastPipeline}, which encapsulates
+ * <p>This class is designed to work with a {@link UncheckedBroadcastPipeline}, which encapsulates
  * the required components for broadcasting, such as a {@link RecordExtractor},
  * {@link AnnouncementExtractor}, and {@link BroadcastDispatcher}.</p>
  *

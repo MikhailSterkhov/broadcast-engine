@@ -38,7 +38,7 @@ public class HibernateBroadcastExample {
         AnnouncementExtractor<StringAnnouncement> announcementExtractor = AnnouncementExtractor.fromID(Long.class,
                 (id) -> new StringAnnouncement(String.format("Hello, @%s, your personal id: %d", employeesById.get(id).getUsername(), id)));
 
-        BroadcastPipeline<Long> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class)
+        BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
