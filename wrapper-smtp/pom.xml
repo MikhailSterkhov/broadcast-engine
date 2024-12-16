@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.mikhailsterkhov</groupId>
         <artifactId>social-broadcast-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>social-broadcast-smtp</artifactId>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-engine</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
