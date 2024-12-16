@@ -73,7 +73,7 @@ public interface BroadcastPipeline<I, A extends Announcement> {
      *
      * @return The {@link BroadcastDispatcher} instance. May return {@code null} if not set.
      */
-    BroadcastDispatcher<I, ?> getDispatcher();
+    BroadcastDispatcher<I, A> getDispatcher();
 
     /**
      * Retrieves the {@link RecordExtractor} configured in the pipeline.

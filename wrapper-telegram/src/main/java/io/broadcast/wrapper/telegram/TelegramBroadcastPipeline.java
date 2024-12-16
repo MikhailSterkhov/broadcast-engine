@@ -1,7 +1,7 @@
 package io.broadcast.wrapper.telegram;
 
 import com.pengrad.telegrambot.TelegramBot;
-import io.broadcast.engine.BroadcastPipeline;
+import io.broadcast.engine.AbstractBroadcastPipelineWrapper;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.dispatch.ComplexBroadcastDispatcher;
@@ -14,10 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, TelegramMessage> {
-    
-    private final BroadcastPipeline<Long, TelegramMessage> internalPipe = BroadcastPipeline.createPipeline();
-    private final Set<BroadcastDispatcher<Long, TelegramMessage>> dispatchers = new HashSet<>();
+public class TelegramBroadcastPipeline extends AbstractBroadcastPipelineWrapper<Long, TelegramMessage> {
+    private final Set<BroadcastDispatcher<Long, TelegramMessage>> customDispatchers = new HashSet<>();
 
     public TelegramBroadcastPipeline(@NotNull String apiToken) {
         this(new TelegramBot(apiToken));
@@ -28,9 +26,9 @@ public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, Telegr
     }
 
     public TelegramBroadcastPipeline(@NotNull TelegramBot telegramBot) {
-        this.dispatchers.add(new TelegramBotDispatcher(telegramBot));
+        this.customDispatchers.add(new TelegramBotDispatcher(telegramBot));
     }
-    
+
     @Override
     public TelegramBroadcastPipeline setAnnouncementExtractor(AnnouncementExtractor<TelegramMessage> announcementExtractor) {
         internalPipe.setAnnouncementExtractor(announcementExtractor);
@@ -39,7 +37,7 @@ public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, Telegr
 
     @Override
     public TelegramBroadcastPipeline setDispatcher(BroadcastDispatcher<Long, TelegramMessage> dispatcher) {
-        dispatchers.add(dispatcher);
+        customDispatchers.add(dispatcher);
         return this;
     }
 
@@ -62,27 +60,7 @@ public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, Telegr
     }
 
     @Override
-    public AnnouncementExtractor<TelegramMessage> getAnnouncementExtractor() {
-        return internalPipe.getAnnouncementExtractor();
-    }
-
-    @Override
-    public BroadcastDispatcher<Long, ?> getDispatcher() {
-        return ComplexBroadcastDispatcher.complex(dispatchers);
-    }
-
-    @Override
-    public RecordExtractor<Long> getRecordExtractor() {
-        return internalPipe.getRecordExtractor();
-    }
-
-    @Override
-    public Scheduler getScheduler() {
-        return internalPipe.getScheduler();
-    }
-
-    @Override
-    public Iterable<BroadcastListener> getListeners() {
-        return internalPipe.getListeners();
+    public BroadcastDispatcher<Long, TelegramMessage> getDispatcher() {
+        return ComplexBroadcastDispatcher.complex(customDispatchers);
     }
 }
