@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
-public class SupplierRecordExtractor<I, T> implements RecordExtractor<I, T> {
+public class SupplierRecordExtractor<I> implements RecordExtractor<I> {
 
-    private final Supplier<Iterable<Record<I, T>>> recordIterableSupplier;
+    private final Supplier<Iterable<Record<I>>> recordIterableSupplier;
 
     @Override
-    public void extract(@NotNull RecordObserver<I, T> recordObserver) {
+    public void extract(@NotNull RecordObserver<I> recordObserver) {
         recordIterableSupplier.get().forEach(recordObserver::observe);
     }
 }

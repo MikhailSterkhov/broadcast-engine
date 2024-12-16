@@ -5,13 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @FunctionalInterface
-public interface RecordToStringSerializer<I, T> {
+public interface RecordToStringSerializer<I> {
 
     @Nullable
-    String serializeToString(@NotNull Record<I, T> record);
+    String serializeToString(@NotNull Record<I> record);
 
     @Contract(pure = true)
-    static <I, T> @NotNull RecordToStringSerializer<I, T> single(@NotNull String text) {
+    static <I> @NotNull RecordToStringSerializer<I> single(@NotNull String text) {
         return ((record) -> text);
     }
 }

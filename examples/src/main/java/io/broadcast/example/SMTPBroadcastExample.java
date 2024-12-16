@@ -7,6 +7,7 @@ import io.broadcast.engine.event.ExceptionListener;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.smtp.MailCredentials;
 import io.broadcast.wrapper.smtp.SMTPBroadcastDispatcher;
@@ -19,12 +20,10 @@ import java.util.Set;
 
 public class SMTPBroadcastExample {
 
-    private static final Set<Record<String, String>> IMMUTABLE_RECORDS =
-            new HashSet<>(
-                    Arrays.asList(
-                            new Record<>("<recipient-mail-address>", "John Doe")
-                    )
-            );
+    private static final RecordsMap<String, String> IMMUTABLE_RECORDS =
+            RecordsMap.<String, String>builderHashMap()
+                    .put("<recipient-mail-address>", "John Doe")
+                    .build();
 
     public static void main(String[] args) {
         SMTPMetadata smtpMetadata = SMTPMetadata.builder()
@@ -37,14 +36,14 @@ public class SMTPBroadcastExample {
                 .smtpPort("465")
                 .build();
 
-        PreparedMessage<Integer, String> preparedMessage
+        PreparedMessage<String> preparedMessage
                 = PreparedMessage.serialize(
                         RecordToStringSerializer.single("<Message-Subject>"),
                         (record) -> String.format("Hello, %s! ", record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
-                .setDispatcher(new SMTPBroadcastDispatcher<>(smtpMetadata))
-                .setRecordExtractor(Extractors.immutable(IMMUTABLE_RECORDS))
+                .setDispatcher(new SMTPBroadcastDispatcher(smtpMetadata))
+                .setRecordExtractor(Extractors.immutable(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setPreparedMessage(preparedMessage)
                 .addListener(new ExceptionListener() {
                     @Override

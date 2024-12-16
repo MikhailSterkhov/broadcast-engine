@@ -10,9 +10,9 @@ import io.broadcast.engine.record.Record;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class Announcement<I, T> {
+public class Announcement<I> {
 
-    private final Record<I, T> record;
+    private final Record<I> record;
     private final TextMessage textMessage;
 
     public boolean hasMessage() {

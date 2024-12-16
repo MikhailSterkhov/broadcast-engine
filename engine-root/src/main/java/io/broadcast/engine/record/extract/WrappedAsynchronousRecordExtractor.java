@@ -6,17 +6,17 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
-public class WrappedAsynchronousRecordExtractor<I, T> extends AbstractAsynchronousRecordExtractor<I, T> {
+public class WrappedAsynchronousRecordExtractor<I> extends AbstractAsynchronousRecordExtractor<I> {
 
     @Contract("_ -> new")
-    public static <I, T> @NotNull WrappedAsynchronousRecordExtractor<I, T> wrap(RecordExtractor<I, T> internal) {
+    public static <I> @NotNull WrappedAsynchronousRecordExtractor<I> wrap(RecordExtractor<I> internal) {
         return new WrappedAsynchronousRecordExtractor<>(internal);
     }
 
-    private final RecordExtractor<I, T> internal;
+    private final RecordExtractor<I> internal;
 
     @Override
-    public void extractAsync(@NotNull RecordObserver<I, T> recordObserver) {
+    public void extractAsync(@NotNull RecordObserver<I> recordObserver) {
         internal.extract(recordObserver);
     }
 }

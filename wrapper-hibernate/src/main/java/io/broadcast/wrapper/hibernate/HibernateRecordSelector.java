@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class HibernateRecordSelector<I, T> implements ChunkyRecordSelector<I, T> {
+public class HibernateRecordSelector<I, T> implements ChunkyRecordSelector<I> {
 
     private final HibernateRecordMetadata<T> metadata;
 
@@ -41,9 +41,8 @@ public class HibernateRecordSelector<I, T> implements ChunkyRecordSelector<I, T>
         return chunkSize;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Iterable<Record<I, T>> select(long index) {
+    public Iterable<Record<I>> select(long index) {
         return inSessionGet(session -> {
             Class<T> entityClass = metadata.getEntityClass();
 
@@ -58,7 +57,7 @@ public class HibernateRecordSelector<I, T> implements ChunkyRecordSelector<I, T>
             query.setFirstResult((int) (chunkSize() * index));
 
             return query.getResultStream()
-                    .map(entity -> new Record<>((I) session.getIdentifier(entity), entity))
+                    .map(entity -> new Record<>((I)session.getIdentifier(entity)))
                     .collect(Collectors.toSet());
         });
     }

@@ -9,12 +9,11 @@ import java.sql.Connection;
 @Getter
 @Builder
 @ToString
-public class JdbcRecordMetadata<I, T> {
+public class JdbcRecordMetadata {
 
     private final Connection connection;
     private final String table;
     private final String idColumn;
     private final boolean autoCloseable;
     private final Integer chunkSize;
-    private final JdbcEntityFactory<I, T> jdbcEntityFactory;
 }

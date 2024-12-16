@@ -10,13 +10,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @RequiredArgsConstructor
-public class ChunkyParallelRecordExtractor<I, T> implements RecordExtractor<I, T> {
+public class ChunkyParallelRecordExtractor<I> implements RecordExtractor<I> {
 
     private static ExecutorService PARALLEL_EXECUTOR;
-    private final ChunkyRecordSelector<I, T> recordSelector;
+    private final ChunkyRecordSelector<I> recordSelector;
 
     @Override
-    public void extract(@NotNull RecordObserver<I, T> recordObserver) {
+    public void extract(@NotNull RecordObserver<I> recordObserver) {
         if (PARALLEL_EXECUTOR == null) {
             PARALLEL_EXECUTOR = Executors.newWorkStealingPool(4);
         }
@@ -34,7 +34,7 @@ public class ChunkyParallelRecordExtractor<I, T> implements RecordExtractor<I, T
 
             PARALLEL_EXECUTOR.submit(() -> {
 
-                Iterable<Record<I, T>> chunk = recordSelector.select(finalIndex);
+                Iterable<Record<I>> chunk = recordSelector.select(finalIndex);
                 chunk.forEach(recordObserver::observe);
             });
         }

@@ -15,13 +15,12 @@ import java.util.function.Function;
  * {@link Integer}, {@link Long}, {@link String}, and {@link UUID}.</p>
  *
  * @param <I> The type of the identifier.
- * @param <T> The type of the entity.
  */
 @Getter
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class Record<I, T> {
+public class Record<I> {
 
     /**
      * Creates a new {@code Record} instance with the specified entity and identifier extractor.
@@ -34,8 +33,8 @@ public class Record<I, T> {
      * @throws NullPointerException if {@code entity} or {@code idGetter} is {@code null}.
      */
     @Contract("_, _ -> new")
-    public static <I, T> @NotNull Record<I, T> of(@NotNull T entity, @NotNull Function<T, I> idGetter) {
-        return new Record<>(idGetter.apply(entity), entity);
+    public static <I, T> @NotNull Record<I> of(@NotNull T entity, @NotNull Function<T, I> idGetter) {
+        return new Record<>(idGetter.apply(entity));
     }
 
     /**
@@ -48,7 +47,7 @@ public class Record<I, T> {
      * @throws NullPointerException if {@code entity} or {@code idGetter} is {@code null}.
      */
     @Contract("_, _ -> new")
-    public static <T> @NotNull Record<Integer, T> ofInt(@NotNull T entity, @NotNull Function<T, Integer> idGetter) {
+    public static <T> @NotNull Record<Integer> ofInt(@NotNull T entity, @NotNull Function<T, Integer> idGetter) {
         return of(entity, idGetter);
     }
 
@@ -62,7 +61,7 @@ public class Record<I, T> {
      * @throws NullPointerException if {@code entity} or {@code idGetter} is {@code null}.
      */
     @Contract("_, _ -> new")
-    public static <T> @NotNull Record<Long, T> ofLong(@NotNull T entity, @NotNull Function<T, Long> idGetter) {
+    public static <T> @NotNull Record<Long> ofLong(@NotNull T entity, @NotNull Function<T, Long> idGetter) {
         return of(entity, idGetter);
     }
 
@@ -76,7 +75,7 @@ public class Record<I, T> {
      * @throws NullPointerException if {@code entity} or {@code idGetter} is {@code null}.
      */
     @Contract("_, _ -> new")
-    public static <T> @NotNull Record<String, T> ofString(@NotNull T entity, @NotNull Function<T, String> idGetter) {
+    public static <T> @NotNull Record<String> ofString(@NotNull T entity, @NotNull Function<T, String> idGetter) {
         return of(entity, idGetter);
     }
 
@@ -90,7 +89,7 @@ public class Record<I, T> {
      * @throws NullPointerException if {@code entity} or {@code idGetter} is {@code null}.
      */
     @Contract("_, _ -> new")
-    public static <T> @NotNull Record<UUID, T> ofUUID(@NotNull T entity, @NotNull Function<T, UUID> idGetter) {
+    public static <T> @NotNull Record<UUID> ofUUID(@NotNull T entity, @NotNull Function<T, UUID> idGetter) {
         return of(entity, idGetter);
     }
 
@@ -98,9 +97,4 @@ public class Record<I, T> {
      * The identifier of the record, uniquely representing the associated entity.
      */
     private final I id;
-
-    /**
-     * The entity associated with the record.
-     */
-    private final T entity;
 }

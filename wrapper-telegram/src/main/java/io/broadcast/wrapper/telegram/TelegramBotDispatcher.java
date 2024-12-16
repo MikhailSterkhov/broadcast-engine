@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
+public class TelegramBotDispatcher implements BroadcastDispatcher<Long> {
 
     private final TelegramBot telegramBot;
 
@@ -28,7 +28,7 @@ public class TelegramBotDispatcher<T> implements BroadcastDispatcher<Long, T> {
     }
 
     @Override
-    public void dispatch(@NotNull Announcement<Long, T> announcement) {
+    public void dispatch(@NotNull Announcement<Long> announcement) {
         SendMessage messageRequest = createSendMessageRequest(
                 announcement.getRecord().getId(),
                 announcement.getTextMessage());

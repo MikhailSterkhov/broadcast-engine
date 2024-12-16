@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @param <T> The type of the record entity.
  */
 @FunctionalInterface
-public interface PreparedMessage<I, T> {
+public interface PreparedMessage<I> {
 
     /**
      * Creates an announcement based on the provided record.
@@ -31,10 +31,10 @@ public interface PreparedMessage<I, T> {
      * @return The created {@link Announcement} for the provided record. Never {@code null}.
      */
     @NotNull
-    Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record);
+    Announcement<I> createAnnouncement(@NotNull Record<I> record);
 
     @Contract("_, _ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutable(String subject, String content) {
+    static <I> @NotNull PreparedMessage<I> immutable(String subject, String content) {
         return immutable(TextMessage.builder()
                 .subject(subject)
                 .content(content)
@@ -42,28 +42,28 @@ public interface PreparedMessage<I, T> {
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutableSubject(String subject) {
+    static <I> @NotNull PreparedMessage<I> immutableSubject(String subject) {
         return immutable(subject, null);
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutableContent(String content) {
+    static <I> @NotNull PreparedMessage<I> immutableContent(String content) {
         return immutable(null, content);
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> immutable(TextMessage textMessage) {
+    static <I> @NotNull PreparedMessage<I> immutable(TextMessage textMessage) {
         return new ImmutableStringPreparedMessage<>(textMessage);
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> serializeText(RecordToTextSerializer<I, T> serializer) {
+    static <I> @NotNull PreparedMessage<I> serializeText(RecordToTextSerializer<I> serializer) {
         return new ApplicablePreparedMessage<>(serializer);
     }
 
     @Contract("_, _ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> serialize(RecordToStringSerializer<I, T> subjectSerializer,
-                                                           RecordToStringSerializer<I, T> contentSerializer) {
+    static <I> @NotNull PreparedMessage<I> serialize(RecordToStringSerializer<I> subjectSerializer,
+                                                     RecordToStringSerializer<I> contentSerializer) {
         return serializeText(record ->
                 TextMessage.builder()
                         .subject(Optional.ofNullable(subjectSerializer).map(s -> s.serializeToString(record)).orElse(null))
@@ -72,12 +72,12 @@ public interface PreparedMessage<I, T> {
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> serializeSubject(RecordToStringSerializer<I, T> subjectSerializer) {
+    static <I> @NotNull PreparedMessage<I> serializeSubject(RecordToStringSerializer<I> subjectSerializer) {
         return serialize(subjectSerializer, null);
     }
 
     @Contract("_ -> new")
-    static <I, T> @NotNull PreparedMessage<I, T> serializeContent(RecordToStringSerializer<I, T> contentSerializer) {
+    static <I> @NotNull PreparedMessage<I> serializeContent(RecordToStringSerializer<I> contentSerializer) {
         return serialize(null, contentSerializer);
     }
 }

@@ -10,6 +10,7 @@ import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.telegram.TelegramBotDispatcher;
 import org.jetbrains.annotations.NotNull;
@@ -20,17 +21,17 @@ import java.util.Set;
 
 public class TelegramBotBroadcastExample {
 
-    private static final Set<Record<Long, String>> TELEGRAM_USERS_RECORDS = new HashSet<>();
+    private static final RecordsMap<Long, String> telegramUsersById = RecordsMap.newHashMap();
 
     public static void main(String[] args) {
-        PreparedMessage<Long, String> preparedMessage
+        PreparedMessage<Long> preparedMessage
                 = PreparedMessage.serialize(
                         RecordToStringSerializer.single("Announcement"),
-                        (record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
+                        (record) -> String.format("Hello, @%s, your telegram-id: %d", telegramUsersById.get(record), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
-                .setDispatcher(new TelegramBotDispatcher<>(startTelegramBot()))
-                .setRecordExtractor(Extractors.supplier(() -> TELEGRAM_USERS_RECORDS))
+                .setDispatcher(new TelegramBotDispatcher(startTelegramBot()))
+                .setRecordExtractor(Extractors.supplier(telegramUsersById::toRecordsSet))
                 .setPreparedMessage(preparedMessage)
                 .setScheduler(Scheduler.threadScheduler(2));
 
@@ -39,19 +40,18 @@ public class TelegramBotBroadcastExample {
     }
 
     private static @NotNull TelegramBot startTelegramBot() {
-        TelegramBot telegramBot = new TelegramBot("<your-telegram-bot-token>");
+        TelegramBot telegramBot = new TelegramBot("7993857695:AAGRnzL0LcbnTcTvviXQVDr8YvDE5zhnuBc");
         telegramBot.setUpdatesListener(updates -> {
 
             for (Update update : updates) {
                 Chat chat = update.message().chat();
-                TELEGRAM_USERS_RECORDS.add(new Record<>(chat.id(), chat.username()));
+
+                telegramUsersById.put(chat.id(), chat.username());
 
                 System.out.println("Added user @" + chat.username());
             }
-
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
-
         return telegramBot;
     }
 }

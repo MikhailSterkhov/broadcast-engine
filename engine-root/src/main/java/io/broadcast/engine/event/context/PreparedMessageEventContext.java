@@ -15,7 +15,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class PreparedMessageEventContext {
 
-    private final Record<?,?> record;
+    private final Record<?> record;
     private final Instant instant;
     private final TextMessage textMessage;
     private final boolean isPrepared;

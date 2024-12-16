@@ -14,6 +14,6 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class RecordExtractedEventContext {
 
-    private final Record<?,?> record;
+    private final Record<?> record;
     private final Instant instant;
 }

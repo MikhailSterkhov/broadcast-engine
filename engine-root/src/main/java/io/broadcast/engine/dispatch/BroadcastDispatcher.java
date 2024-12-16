@@ -4,7 +4,7 @@ import io.broadcast.engine.Announcement;
 import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
-public interface BroadcastDispatcher<I, T> {
+public interface BroadcastDispatcher<I> {
 
-    void dispatch(@NotNull Announcement<I, T> announcement);
+    void dispatch(@NotNull Announcement<I> announcement);
 }

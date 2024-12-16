@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class STDOUTBroadcastDispatcher<I, T> implements BroadcastDispatcher<I, T> {
+public class STDOUTBroadcastDispatcher<I> implements BroadcastDispatcher<I> {
 
     @Override
-    public void dispatch(@NotNull Announcement<I, T> announcement) {
+    public void dispatch(@NotNull Announcement<I> announcement) {
         TextMessage textMessage = announcement.getTextMessage();
 
         if (textMessage != null) {

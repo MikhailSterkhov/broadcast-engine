@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 @RequiredArgsConstructor
-public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T> {
+public class SMTPBroadcastDispatcher implements BroadcastDispatcher<String> {
 
     private final SMTPMetadata smtpMetadata;
     private Session session;
@@ -40,7 +40,7 @@ public class SMTPBroadcastDispatcher<T> implements BroadcastDispatcher<String, T
     }
 
     @Override
-    public void dispatch(@NotNull Announcement<String, T> announcement) {
+    public void dispatch(@NotNull Announcement<String> announcement) {
         if (session == null) {
             session = createMailSession();
         }

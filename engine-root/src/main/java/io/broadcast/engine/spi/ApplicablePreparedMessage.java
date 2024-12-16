@@ -10,12 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class ApplicablePreparedMessage<I, T> implements PreparedMessage<I, T> {
+public class ApplicablePreparedMessage<I> implements PreparedMessage<I> {
 
-    private final RecordToTextSerializer<I, T> serializer;
+    private final RecordToTextSerializer<I> serializer;
 
     @Override
-    public @NotNull Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record) {
+    public @NotNull Announcement<I> createAnnouncement(@NotNull Record<I> record) {
         return new Announcement<>(record,
                 Optional.ofNullable(serializer).map(serializer -> serializer.serializeToText(record))
                         .orElse(null));

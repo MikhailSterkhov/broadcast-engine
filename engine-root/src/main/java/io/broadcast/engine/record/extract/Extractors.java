@@ -21,11 +21,10 @@ public class Extractors {
      *
      * @param recordIterable The iterable containing records to be extracted. Must not be {@code null}.
      * @param <I>            The type of the record identifier.
-     * @param <T>            The type of the record entity.
      * @return A {@link RecordExtractor} that provides immutable access to the given records.
      * @throws NullPointerException if {@code recordIterable} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> immutable(Iterable<Record<I, T>> recordIterable) {
+    public <I> RecordExtractor<I> immutable(Iterable<Record<I>> recordIterable) {
         return new ImmutableRecordExtractor<>(recordIterable);
     }
 
@@ -34,11 +33,10 @@ public class Extractors {
      *
      * @param recordIterableSupplier A supplier providing an iterable of records to be extracted. Must not be {@code null}.
      * @param <I>                    The type of the record identifier.
-     * @param <T>                    The type of the record entity.
      * @return A {@link RecordExtractor} that fetches records from the supplier on demand.
      * @throws NullPointerException if {@code recordIterableSupplier} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> supplier(Supplier<Iterable<Record<I, T>>> recordIterableSupplier) {
+    public <I> RecordExtractor<I> supplier(Supplier<Iterable<Record<I>>> recordIterableSupplier) {
         return new SupplierRecordExtractor<>(recordIterableSupplier);
     }
 
@@ -47,11 +45,10 @@ public class Extractors {
      *
      * @param recordSelector The selector for chunk-based record processing. Must not be {@code null}.
      * @param <I>            The type of the record identifier.
-     * @param <T>            The type of the record entity.
      * @return A {@link RecordExtractor} that performs parallel chunk-based record extraction.
      * @throws NullPointerException if {@code recordSelector} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> chunkyParallel(ChunkyRecordSelector<I, T> recordSelector) {
+    public <I> RecordExtractor<I> chunkyParallel(ChunkyRecordSelector<I> recordSelector) {
         return new ChunkyParallelRecordExtractor<>(recordSelector);
     }
 
@@ -60,11 +57,10 @@ public class Extractors {
      *
      * @param extractor The original record extractor to be wrapped. Must not be {@code null}.
      * @param <I>       The type of the record identifier.
-     * @param <T>       The type of the record entity.
      * @return A new {@link RecordExtractor} that extracts records asynchronously.
      * @throws NullPointerException if {@code extractor} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> wrapAsync(RecordExtractor<I, T> extractor) {
+    public <I> RecordExtractor<I> wrapAsync(RecordExtractor<I> extractor) {
         return WrappedAsynchronousRecordExtractor.wrap(extractor);
     }
 
@@ -73,11 +69,10 @@ public class Extractors {
      *
      * @param recordIterable The iterable containing records to be extracted. Must not be {@code null}.
      * @param <I>            The type of the record identifier.
-     * @param <T>            The type of the record entity.
      * @return A {@link RecordExtractor} that performs asynchronous extraction on immutable records.
      * @throws NullPointerException if {@code recordIterable} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> immutableAsync(Iterable<Record<I, T>> recordIterable) {
+    public <I> RecordExtractor<I> immutableAsync(Iterable<Record<I>> recordIterable) {
         return wrapAsync(immutable(recordIterable));
     }
 
@@ -86,11 +81,10 @@ public class Extractors {
      *
      * @param recordIterableSupplier A supplier providing an iterable of records to be extracted. Must not be {@code null}.
      * @param <I>                    The type of the record identifier.
-     * @param <T>                    The type of the record entity.
      * @return A {@link RecordExtractor} that performs asynchronous extraction on supplied records.
      * @throws NullPointerException if {@code recordIterableSupplier} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> supplierAsync(Supplier<Iterable<Record<I, T>>> recordIterableSupplier) {
+    public <I> RecordExtractor<I> supplierAsync(Supplier<Iterable<Record<I>>> recordIterableSupplier) {
         return wrapAsync(supplier(recordIterableSupplier));
     }
 
@@ -99,11 +93,10 @@ public class Extractors {
      *
      * @param recordSelector The selector for chunk-based record processing. Must not be {@code null}.
      * @param <I>            The type of the record identifier.
-     * @param <T>            The type of the record entity.
      * @return A {@link RecordExtractor} that performs asynchronous parallel chunk-based record extraction.
      * @throws NullPointerException if {@code recordSelector} is {@code null}.
      */
-    public <I, T> RecordExtractor<I, T> chunkyParallelAsync(ChunkyRecordSelector<I, T> recordSelector) {
+    public <I> RecordExtractor<I> chunkyParallelAsync(ChunkyRecordSelector<I> recordSelector) {
         return wrapAsync(chunkyParallel(recordSelector));
     }
 }

@@ -8,12 +8,12 @@ import io.broadcast.engine.record.Record;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
-public class ImmutableStringPreparedMessage<I, T> implements PreparedMessage<I, T> {
+public class ImmutableStringPreparedMessage<I> implements PreparedMessage<I> {
 
     private final TextMessage textMessage;
 
     @Override
-    public @NotNull Announcement<I, T> createAnnouncement(@NotNull Record<I, T> record) {
+    public @NotNull Announcement<I> createAnnouncement(@NotNull Record<I> record) {
         return new Announcement<>(record, textMessage);
     }
 }
