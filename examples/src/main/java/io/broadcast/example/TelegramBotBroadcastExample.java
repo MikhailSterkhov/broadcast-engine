@@ -8,6 +8,7 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.PreparedMessage;
 import io.broadcast.engine.record.Record;
+import io.broadcast.engine.record.RecordToStringSerializer;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.telegram.TelegramBotDispatcher;
@@ -23,7 +24,9 @@ public class TelegramBotBroadcastExample {
 
     public static void main(String[] args) {
         PreparedMessage<Long, String> preparedMessage
-                = PreparedMessage.serializeContent((record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
+                = PreparedMessage.serialize(
+                        RecordToStringSerializer.single("Announcement"),
+                        (record) -> String.format("Hello, @%s, your telegram-id: %d", record.getEntity(), record.getId()));
 
         BroadcastPipeline broadcastPipeline = BroadcastPipeline.createPipeline()
                 .setDispatcher(new TelegramBotDispatcher<>(startTelegramBot()))
