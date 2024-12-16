@@ -157,8 +157,6 @@ public class Text {
         }
 
         public Text build() {
-            System.out.println(text);
-            messageEntityList.forEach(System.out::println);
             return new Text(text.toString(), messageEntityList);
         }
     }

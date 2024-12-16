@@ -16,10 +16,8 @@ import java.util.Set;
 
 public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, TelegramMessage> {
     
-    private final BroadcastPipeline<Long, TelegramMessage> internalPipe = BroadcastPipeline.createPipeline(Long.class, TelegramMessage.class);
+    private final BroadcastPipeline<Long, TelegramMessage> internalPipe = BroadcastPipeline.createPipeline();
     private final Set<BroadcastDispatcher<Long, TelegramMessage>> dispatchers = new HashSet<>();
-    
-    private final TelegramBot telegramBot;
 
     public TelegramBroadcastPipeline(@NotNull String apiToken) {
         this(new TelegramBot(apiToken));
@@ -30,33 +28,37 @@ public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, Telegr
     }
 
     public TelegramBroadcastPipeline(@NotNull TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
+        this.dispatchers.add(new TelegramBotDispatcher(telegramBot));
     }
     
     @Override
-    public BroadcastPipeline<Long, TelegramMessage> setAnnouncementExtractor(AnnouncementExtractor<TelegramMessage> announcementExtractor) {
-        return internalPipe.setAnnouncementExtractor(announcementExtractor);
+    public TelegramBroadcastPipeline setAnnouncementExtractor(AnnouncementExtractor<TelegramMessage> announcementExtractor) {
+        internalPipe.setAnnouncementExtractor(announcementExtractor);
+        return this;
     }
 
     @Override
-    public BroadcastPipeline<Long, TelegramMessage> setDispatcher(BroadcastDispatcher<Long, TelegramMessage> dispatcher) {
+    public TelegramBroadcastPipeline setDispatcher(BroadcastDispatcher<Long, TelegramMessage> dispatcher) {
         dispatchers.add(dispatcher);
         return this;
     }
 
     @Override
-    public BroadcastPipeline<Long, TelegramMessage> setRecordExtractor(RecordExtractor<Long> recordsExtractor) {
-        return internalPipe.setRecordExtractor(recordsExtractor);
+    public TelegramBroadcastPipeline setRecordExtractor(RecordExtractor<Long> recordsExtractor) {
+        internalPipe.setRecordExtractor(recordsExtractor);
+        return this;
     }
 
     @Override
-    public BroadcastPipeline<Long, TelegramMessage> setScheduler(Scheduler scheduler) {
-        return internalPipe.setScheduler(scheduler);
+    public TelegramBroadcastPipeline setScheduler(Scheduler scheduler) {
+        internalPipe.setScheduler(scheduler);
+        return this;
     }
 
     @Override
-    public BroadcastPipeline<Long, TelegramMessage> addListener(BroadcastListener listener) {
-        return internalPipe.addListener(listener);
+    public TelegramBroadcastPipeline addListener(BroadcastListener listener) {
+        internalPipe.addListener(listener);
+        return this;
     }
 
     @Override
@@ -66,13 +68,7 @@ public class TelegramBroadcastPipeline implements BroadcastPipeline<Long, Telegr
 
     @Override
     public BroadcastDispatcher<Long, ?> getDispatcher() {
-        if (internalPipe.getDispatcher() == null) {
-            Set<BroadcastDispatcher<Long, TelegramMessage>> clone = new HashSet<>(dispatchers);
-            clone.add(new TelegramBotDispatcher(telegramBot));
-            
-            internalPipe.setDispatcher(ComplexBroadcastDispatcher.complex(clone));
-        }
-        return internalPipe.getDispatcher();
+        return ComplexBroadcastDispatcher.complex(dispatchers);
     }
 
     @Override

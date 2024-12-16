@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Update;
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
-import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.record.extract.Extractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
@@ -36,7 +35,6 @@ public class TelegramBotBroadcastExample {
                         .build());
 
         TelegramBroadcastPipeline broadcastPipeline = new TelegramBroadcastPipeline(startTelegramBot())
-                .setDispatcher(new STDOUTBroadcastDispatcher<>())
                 .setRecordExtractor(Extractors.mutable(telegramUsersById::toRecordsSet))
                 .setAnnouncementExtractor(telegramMessageExtractor)
                 .setScheduler(Scheduler.threadScheduler(2));
