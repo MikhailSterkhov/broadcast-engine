@@ -56,8 +56,8 @@ public BroadcastEngine createEngine() {
             AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
     BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
-            .setDispatcher(new STDOUTBroadcastDispatcher<>()) // optional
-            .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+            .setDispatcher(BroadcastDispatcher.stdout())
+            .setRecordExtractor(RecordExtractor.constant(IMMUTABLE_RECORDS.toRecordsSet()))
             .setAnnouncementExtractor(announcementExtractor)
             .setScheduler(Scheduler.threadScheduler(2)); // optional
     
