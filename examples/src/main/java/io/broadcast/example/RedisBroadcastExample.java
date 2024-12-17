@@ -5,12 +5,12 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.extract.RecordExtractors;
 import io.broadcast.engine.record.map.RecordsMap;
 
 import java.util.Arrays;
 
-public class ImmutableRecordsBroadcastExample {
+public class RedisBroadcastExample {
 
     private static final String[] NAMES = {"Mikhail", "Sergey", "Mark", "Andrey"};
 
@@ -25,7 +25,7 @@ public class ImmutableRecordsBroadcastExample {
 
         BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+                .setRecordExtractor(RecordExtractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

@@ -5,7 +5,7 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.extract.RecordExtractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.wrapper.jdbc.JdbcRecordMetadata;
 import io.broadcast.wrapper.jdbc.JdbcRecordSelector;
@@ -32,7 +32,7 @@ public class JdbcH2BroadcastExample {
 
         BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(Extractors.chunkyParallelAsync(new JdbcRecordSelector<>(jdbcRecordMetadata)))
+                .setRecordExtractor(RecordExtractors.chunkyParallelAsync(new JdbcRecordSelector<>(jdbcRecordMetadata)))
                 .setAnnouncementExtractor(announcementExtractor);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

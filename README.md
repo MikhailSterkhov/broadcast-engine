@@ -104,12 +104,13 @@ broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
 The library also provides a set of its own pre-packaged tools 
 to facilitate the realization of common business tasks
 
-| Name      | Artifact ID                  | Version | API Usage                                                                                          |
-|-----------|------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
-| Mailing   | `social-broadcast-smtp`      | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
-| Telegram  | `social-broadcast-telegram`  | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Name          | Artifact ID                    | Version | API Usage                                                                                          |
+|---------------|--------------------------------|---------|----------------------------------------------------------------------------------------------------|
+| Hibernate     | `social-broadcast-hibernate`   | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
+| Spring Data   | `social-broadcast-spring-data` | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SpringDataBroadcastExample.java)  |
+| Telegram Bots | `social-broadcast-telegram`    | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| java.sql      | `social-broadcast-jdbc`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
+| javax.mail    | `social-broadcast-smtp`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 

@@ -17,6 +17,7 @@
         <module>wrapper-hibernate</module>
         <module>wrapper-telegram</module>
         <module>wrapper-smtp</module>
+        <module>wrapper-spring-data</module>
     </modules>
 
     <properties>

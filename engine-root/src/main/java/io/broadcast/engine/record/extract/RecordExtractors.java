@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * This class cannot be instantiated and all methods are static.</p>
  */
 @UtilityClass
-public class Extractors {
+public class RecordExtractors {
 
     /**
      * Creates an immutable {@link RecordExtractor} that iterates over the given {@link Iterable} of records.

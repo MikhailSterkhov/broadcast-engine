@@ -5,12 +5,15 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
+import io.broadcast.engine.event.BroadcastEventAdapter;
+import io.broadcast.engine.event.context.BroadcastStartEventContext;
+import io.broadcast.engine.event.context.PreparedMessageEventContext;
 import io.broadcast.engine.record.extract.RecordExtractors;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
-import io.broadcast.wrapper.hibernate.HibernateRecordMetadata;
-import io.broadcast.wrapper.hibernate.HibernateRecordSelector;
+import io.broadcast.wrapper.spring.data.ChunkySpringDataRecordMetadata;
+import io.broadcast.wrapper.spring.data.ChunkySpringDataRecordSelector;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
@@ -23,16 +26,16 @@ import org.hibernate.cfg.Configuration;
 
 import java.time.Duration;
 
-public class HibernateBroadcastExample {
+public class SpringDataBroadcastExample {
 
     private static final RecordsMap<Long, Employee> employeesById = RecordsMap.newHashMap();
 
     public static void main(String[] args) {
-        HibernateRecordMetadata<Employee> metadata =
-                HibernateRecordMetadata.<Employee>builder()
+        ChunkySpringDataRecordMetadata<Employee> metadata =
+                ChunkySpringDataRecordMetadata.<Employee>builder()
                         .chunkSize(10)
                         .entityClass(Employee.class)
-                        .sessionFactory(provideSessionFactory())
+                        .entityManager(provideSessionFactory().createEntityManager())
                         .build();
 
         AnnouncementExtractor<StringAnnouncement> announcementExtractor = AnnouncementExtractor.fromID(Long.class,
@@ -40,8 +43,24 @@ public class HibernateBroadcastExample {
 
         BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(RecordExtractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
+                .setRecordExtractor(RecordExtractors.chunkyParallel(new ChunkySpringDataRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
+                .addListener(new BroadcastEventAdapter() {
+                    @Override
+                    public void broadcastStart(BroadcastStartEventContext eventContext) {
+                        System.out.println(eventContext);
+                    }
+
+                    @Override
+                    public void preparedMessage(PreparedMessageEventContext eventContext) {
+                        System.out.println(eventContext);
+                    }
+
+                    @Override
+                    public void throwsException(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
                 .setScheduler(Scheduler.singleThreadScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
