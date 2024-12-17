@@ -4,7 +4,7 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
+import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastEventAdapter;
 import io.broadcast.engine.event.context.BroadcastStartEventContext;
 import io.broadcast.engine.event.context.PreparedMessageEventContext;
@@ -42,7 +42,7 @@ public class SpringDataBroadcastExample {
                 (id) -> new StringAnnouncement(String.format("Hello, @%s, your personal id: %d", employeesById.get(id).getUsername(), id)));
 
         BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
-                .setDispatcher(new STDOUTBroadcastDispatcher<>())
+                .setDispatcher(BroadcastDispatcher.stdout())
                 .setRecordExtractor(RecordExtractor.chunkyParallel(new ChunkySpringDataRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
                 .addListener(new BroadcastEventAdapter() {

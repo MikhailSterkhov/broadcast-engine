@@ -5,11 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.util.function.Function;
-
 public class MessageQueueJedisPublisher extends AbstractJedisPublisher {
-    private static final MessageQueueExtractor SPLIT_VALUE_EXTRACTOR =
-             announcement -> String.format("%s:%s", announcement.getSubject(), announcement.getContent());
+
+    private static final MessageQueueExtractor SEPARATED_QUEUE_EXTRACTOR
+            = MessageQueueExtractor.separated(':');
 
     private final String channel;
     private final MessageQueueExtractor messageQueueExtractor;
@@ -31,13 +30,13 @@ public class MessageQueueJedisPublisher extends AbstractJedisPublisher {
     public MessageQueueJedisPublisher(@NotNull JedisPool jedisPool, @NotNull String channel) {
         super(jedisPool);
         this.channel = channel;
-        this.messageQueueExtractor = SPLIT_VALUE_EXTRACTOR;
+        this.messageQueueExtractor = SEPARATED_QUEUE_EXTRACTOR;
     }
 
     public MessageQueueJedisPublisher(@NotNull Jedis jedis, @NotNull String channel) {
         super(jedis);
         this.channel = channel;
-        this.messageQueueExtractor = SPLIT_VALUE_EXTRACTOR;
+        this.messageQueueExtractor = SEPARATED_QUEUE_EXTRACTOR;
     }
 
     @Override
