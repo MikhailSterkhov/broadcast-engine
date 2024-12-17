@@ -13,6 +13,7 @@
 
     <properties>
         <h2database.version>2.1.214</h2database.version>
+        <jedis.version>5.1.5</jedis.version>
 
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -38,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-redis</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
             <artifactId>social-broadcast-jdbc</artifactId>
             <version>1.0.3</version>
         </dependency>
@@ -52,11 +58,16 @@
             <version>1.0.3</version>
         </dependency>
 
-        <!-- Database Connection Drivers dependencies -->
+        <!-- Other helpful dependencies -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2database.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
     </dependencies>
 </project>

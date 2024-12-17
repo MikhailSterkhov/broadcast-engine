@@ -5,27 +5,25 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.extract.RecordExtractors;
-import io.broadcast.engine.record.map.RecordsMap;
+import io.broadcast.wrapper.jeds.JedisRecordExtractor;
+import redis.clients.jedis.Jedis;
 
-import java.util.Arrays;
+public class JedisBroadcastExample {
 
-public class RedisBroadcastExample {
+    private static JedisRecordExtractor createJedisExtractor(String key) {
+        Jedis jedis = new Jedis();
+        jedis.hset(key, "itzstonlex", "");
 
-    private static final String[] NAMES = {"Mikhail", "Sergey", "Mark", "Andrey"};
-
-    private static final RecordsMap<Integer, String> IMMUTABLE_RECORDS =
-            RecordsMap.<Integer, String>builderHashMap()
-                    .putStream(Arrays.asList(10, 20, 30, 40), idNumber -> NAMES[(idNumber / 10) - 1])
-                    .build();
+        return JedisRecordExtractor.hgetall(jedis, key);
+    }
 
     public static void main(String[] args) {
         AnnouncementExtractor<StringAnnouncement> announcementExtractor =
                 AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
-        BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
+        BroadcastPipeline<String, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(String.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(RecordExtractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+                .setRecordExtractor(createJedisExtractor("players"))
                 .setAnnouncementExtractor(announcementExtractor);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

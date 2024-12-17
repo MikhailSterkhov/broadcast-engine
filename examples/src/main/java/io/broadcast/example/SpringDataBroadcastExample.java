@@ -8,7 +8,7 @@ import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastEventAdapter;
 import io.broadcast.engine.event.context.BroadcastStartEventContext;
 import io.broadcast.engine.event.context.PreparedMessageEventContext;
-import io.broadcast.engine.record.extract.RecordExtractors;
+import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
@@ -43,7 +43,7 @@ public class SpringDataBroadcastExample {
 
         BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
                 .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(RecordExtractors.chunkyParallel(new ChunkySpringDataRecordSelector<>(metadata)))
+                .setRecordExtractor(RecordExtractor.chunkyParallel(new ChunkySpringDataRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
                 .addListener(new BroadcastEventAdapter() {
                     @Override
@@ -54,11 +54,6 @@ public class SpringDataBroadcastExample {
                     @Override
                     public void preparedMessage(PreparedMessageEventContext eventContext) {
                         System.out.println(eventContext);
-                    }
-
-                    @Override
-                    public void throwsException(Throwable throwable) {
-                        throwable.printStackTrace();
                     }
                 })
                 .setScheduler(Scheduler.singleThreadScheduler());

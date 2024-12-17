@@ -18,6 +18,7 @@
         <module>wrapper-telegram</module>
         <module>wrapper-smtp</module>
         <module>wrapper-spring-data</module>
+        <module>wrapper-redis</module>
     </modules>
 
     <properties>

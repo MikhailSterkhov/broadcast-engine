@@ -5,7 +5,7 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.ContentedAnnouncement;
 import io.broadcast.engine.event.ExceptionListener;
-import io.broadcast.engine.record.extract.RecordExtractors;
+import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.smtp.MailCredentials;
@@ -41,7 +41,7 @@ public class SMTPBroadcastExample {
 
         BroadcastPipeline<String, ContentedAnnouncement<String>> broadcastPipeline = BroadcastPipeline.createContentedPipeline(String.class, String.class)
                 .setDispatcher(new SMTPBroadcastDispatcher(smtpMetadata))
-                .setRecordExtractor(RecordExtractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+                .setRecordExtractor(RecordExtractor.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor)
                 .addListener(new ExceptionListener() {
                     @Override
