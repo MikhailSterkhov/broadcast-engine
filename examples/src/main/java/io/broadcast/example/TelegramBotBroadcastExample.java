@@ -34,7 +34,7 @@ public class TelegramBotBroadcastExample {
                                 .build())
                         .build());
 
-        TelegramBroadcastPipeline broadcastPipeline = new TelegramBroadcastPipeline(startTelegramBot())
+        TelegramBroadcastPipeline broadcastPipeline = TelegramBroadcastPipeline.fromTelegramBot(startTelegramBot())
                 .setRecordExtractor(RecordExtractor.mutable(telegramUsersById::toRecordsSet))
                 .setAnnouncementExtractor(telegramMessageExtractor)
                 .setScheduler(Scheduler.threadScheduler(2));
