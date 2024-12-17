@@ -1,8 +1,7 @@
-package io.broadcast.wrapper.jeds;
+package io.broadcast.wrapper.jeds.extractor;
 
 import io.broadcast.engine.record.Record;
 import io.broadcast.engine.record.RecordObserver;
-import io.broadcast.engine.record.extract.RecordExtractor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
@@ -14,7 +13,7 @@ public abstract class AbstractJedisRecordExtractor implements JedisRecordExtract
     private final Jedis jedis;
     private final String key;
 
-    public AbstractJedisRecordExtractor(JedisPool jedisPool, String key) {
+    public AbstractJedisRecordExtractor(@NotNull JedisPool jedisPool, @NotNull String key) {
         this(jedisPool.getResource(), key);
     }
 

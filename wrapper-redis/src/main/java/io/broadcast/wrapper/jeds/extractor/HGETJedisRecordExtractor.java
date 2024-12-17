@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds;
+package io.broadcast.wrapper.jeds.extractor;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

@@ -7,38 +7,40 @@ import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.scheduler.Scheduler;
 
-public class AbstractBroadcastPipelineWrapper<I, A extends Announcement> implements BroadcastPipeline<I, A> {
+@SuppressWarnings("unchecked")
+public class AbstractBroadcastPipelineWrapper<I, A extends Announcement, T extends AbstractBroadcastPipelineWrapper<I, A, T>>
+        implements BroadcastPipeline<I, A> {
     
     protected final BroadcastPipeline<I, A> internalPipe = BroadcastPipeline.createPipeline();
 
     @Override
-    public AbstractBroadcastPipelineWrapper<I, A> setAnnouncementExtractor(AnnouncementExtractor<A> announcementExtractor) {
+    public T setAnnouncementExtractor(AnnouncementExtractor<A> announcementExtractor) {
         internalPipe.setAnnouncementExtractor(announcementExtractor);
-        return this;
+        return (T) this;
     }
 
     @Override
-    public AbstractBroadcastPipelineWrapper<I, A> setDispatcher(BroadcastDispatcher<I, A> dispatcher) {
+    public T setDispatcher(BroadcastDispatcher<I, A> dispatcher) {
         internalPipe.setDispatcher(dispatcher);
-        return this;
+        return (T) this;
     }
 
     @Override
-    public AbstractBroadcastPipelineWrapper<I, A> setRecordExtractor(RecordExtractor<I> recordsExtractor) {
+    public T setRecordExtractor(RecordExtractor<I> recordsExtractor) {
         internalPipe.setRecordExtractor(recordsExtractor);
-        return this;
+        return (T) this;
     }
 
     @Override
-    public AbstractBroadcastPipelineWrapper<I, A> setScheduler(Scheduler scheduler) {
+    public T setScheduler(Scheduler scheduler) {
         internalPipe.setScheduler(scheduler);
-        return this;
+        return (T) this;
     }
 
     @Override
-    public AbstractBroadcastPipelineWrapper<I, A> addListener(BroadcastListener listener) {
+    public T addListener(BroadcastListener listener) {
         internalPipe.addListener(listener);
-        return this;
+        return (T) this;
     }
 
     @Override
