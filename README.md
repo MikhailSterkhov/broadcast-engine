@@ -109,7 +109,7 @@ to facilitate the realization of common business tasks
 | Hibernate     | `social-broadcast-hibernate`   | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
 | Spring Data   | `social-broadcast-spring-data` | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SpringDataBroadcastExample.java)  |
 | Telegram Bots | `social-broadcast-telegram`    | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
-| Redis (jedis) | `social-broadcast-redis`       | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/RedisBroadcastExample.java)       |
+| Redis (jedis) | `social-broadcast-redis`       | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JedisBroadcastExample.java)       |
 | java.sql      | `social-broadcast-jdbc`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
 | javax.mail    | `social-broadcast-smtp`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
 
