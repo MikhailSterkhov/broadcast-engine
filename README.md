@@ -130,7 +130,7 @@ is the dependency identifier from the `Artifact ID` table column:
 **Gradle / Groovy:**
 
 ```groovy
-implementation 'con.github.mikhailterkhov:[Artifact-ID]:[Version]'
+implementation 'con.github.MikhailSterkhov:[Artifact-ID]:[Version]'
 ```
 
 ---
@@ -179,5 +179,5 @@ repositories {
 Dependency:
 
 ```groovy
-implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.3'
+implementation 'con.github.MikhailSterkhov:social-broadcast-engine:1.0.3'
 ```
