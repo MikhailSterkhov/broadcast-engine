@@ -4,8 +4,8 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.dispatch.BroadcastDispatcher;
+import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.hibernate.BroadcastHibernateException;
@@ -39,8 +39,8 @@ public class HibernateBroadcastExample {
                 (id) -> new StringAnnouncement(String.format("Hello, @%s, your personal id: %d", employeesById.get(id).getUsername(), id)));
 
         BroadcastPipeline<Long, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Long.class, StringAnnouncement.class)
-                .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(Extractors.chunkyParallel(new HibernateRecordSelector<>(metadata)))
+                .setDispatcher(BroadcastDispatcher.stdout())
+                .setRecordExtractor(RecordExtractor.chunkyParallel(new HibernateRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
                 .setScheduler(Scheduler.singleThreadScheduler());
 

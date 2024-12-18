@@ -6,7 +6,7 @@
 
     <groupId>com.github.mikhailsterkhov</groupId>
     <artifactId>social-broadcast-parent</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
     <packaging>pom</packaging>
 
@@ -17,6 +17,8 @@
         <module>wrapper-hibernate</module>
         <module>wrapper-telegram</module>
         <module>wrapper-smtp</module>
+        <module>wrapper-spring-data</module>
+        <module>wrapper-redis</module>
     </modules>
 
     <properties>

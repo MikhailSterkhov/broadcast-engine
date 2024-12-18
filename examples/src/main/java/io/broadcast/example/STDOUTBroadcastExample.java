@@ -4,13 +4,13 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.engine.dispatch.STDOUTBroadcastDispatcher;
-import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.dispatch.BroadcastDispatcher;
+import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 
 import java.util.Arrays;
 
-public class ImmutableRecordsBroadcastExample {
+public class STDOUTBroadcastExample {
 
     private static final String[] NAMES = {"Mikhail", "Sergey", "Mark", "Andrey"};
 
@@ -24,8 +24,8 @@ public class ImmutableRecordsBroadcastExample {
                 AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
         BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
-                .setDispatcher(new STDOUTBroadcastDispatcher<>())
-                .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+                .setDispatcher(BroadcastDispatcher.stdout())
+                .setRecordExtractor(RecordExtractor.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor);
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

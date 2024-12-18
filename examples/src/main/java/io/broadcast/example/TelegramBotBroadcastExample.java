@@ -6,12 +6,15 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Update;
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
-import io.broadcast.engine.record.extract.Extractors;
+import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
 import io.broadcast.wrapper.telegram.TelegramBroadcastPipeline;
-import io.broadcast.wrapper.telegram.objects.TelegramMessage;
-import io.broadcast.wrapper.telegram.objects.Text;
+import io.broadcast.wrapper.telegram.model.NeededStars;
+import io.broadcast.wrapper.telegram.model.TelegramMessage;
+import io.broadcast.wrapper.telegram.model.Text;
+import io.broadcast.wrapper.telegram.model.Multimedia;
+import io.broadcast.wrapper.telegram.model.media.Photo;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -22,8 +25,8 @@ public class TelegramBotBroadcastExample {
 
     public static void main(String[] args) {
         AnnouncementExtractor<TelegramMessage> telegramMessageExtractor
-                = AnnouncementExtractor.fromID(Long.class, (telegramUserID) ->
-                TelegramMessage.builder()
+                = AnnouncementExtractor.fromID(Long.class,
+                (telegramUserID) -> TelegramMessage.builder()
                         .text(Text.builder()
                                 .text("Hello, your current telegram account ID: " + telegramUserID)
                                 .newline()
@@ -32,10 +35,15 @@ public class TelegramBotBroadcastExample {
                                 .text("Please,").bold(" subscribe at bot ").text("or our email: ")
                                 .email("itzstonlex@yandex.ru")
                                 .build())
+                        //.paidMediaStars(NeededStars.unlockByCount(2))
+                        .attachPhoto(
+                                Multimedia.of(
+                                        Photo.fromStream(TelegramBotBroadcastExample.class.getResourceAsStream("/broadcast.png")),
+                                        Photo.fromStream(TelegramBotBroadcastExample.class.getResourceAsStream("/broadcast.png"))))
                         .build());
 
-        TelegramBroadcastPipeline broadcastPipeline = new TelegramBroadcastPipeline(startTelegramBot())
-                .setRecordExtractor(Extractors.mutable(telegramUsersById::toRecordsSet))
+        TelegramBroadcastPipeline broadcastPipeline = TelegramBroadcastPipeline.fromTelegramBot(startTelegramBot())
+                .setRecordExtractor(RecordExtractor.mutable(telegramUsersById::toRecordsSet))
                 .setAnnouncementExtractor(telegramMessageExtractor)
                 .setScheduler(Scheduler.threadScheduler(2));
 

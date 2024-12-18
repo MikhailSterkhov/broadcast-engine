@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.telegram.objects;
+package io.broadcast.wrapper.telegram.model;
 
 import com.pengrad.telegrambot.model.MessageEntity;
 import lombok.*;

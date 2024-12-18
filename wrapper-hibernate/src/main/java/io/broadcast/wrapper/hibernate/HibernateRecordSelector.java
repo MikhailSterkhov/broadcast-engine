@@ -4,7 +4,6 @@ import io.broadcast.engine.record.ChunkyRecordSelector;
 import io.broadcast.engine.record.Record;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -24,9 +23,7 @@ public class HibernateRecordSelector<I, T> implements ChunkyRecordSelector<I> {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 
-            Root<T> root = criteria.from(metadata.getEntityClass());
-
-            criteria.select(builder.count(root));
+            criteria.select(builder.count(criteria.from(metadata.getEntityClass())));
 
             return session.createQuery(criteria).getSingleResult();
         });

@@ -2,7 +2,7 @@
   <img src=".assets/broadcast.png" alt="broadcast" width="250"/>
   <br>
   <img src="https://img.shields.io/badge/language-Java-magenta?style=flat" />
-  <img src="https://img.shields.io/badge/release-v1.0.2-magenta?style=flat" />
+  <img src="https://img.shields.io/badge/release-v1.0.3-magenta?style=flat" />
   <img src="https://img.shields.io/badge/repository-jitpack.io-magenta?style=flat" />
   <img src="https://img.shields.io/badge/license-MIT-magenta?style=flat" />
 </div>
@@ -56,8 +56,8 @@ public BroadcastEngine createEngine() {
             AnnouncementExtractor.fromID(Integer.class, (id) -> new StringAnnouncement(String.format("[ID: %s] -> \"Hello world!\"", id)));
 
     BroadcastPipeline<Integer, StringAnnouncement> broadcastPipeline = BroadcastPipeline.createPipeline(Integer.class, StringAnnouncement.class)
-            .setDispatcher(new STDOUTBroadcastDispatcher<>()) // optional
-            .setRecordExtractor(Extractors.constant(IMMUTABLE_RECORDS.toRecordsSet()))
+            .setDispatcher(BroadcastDispatcher.stdout())
+            .setRecordExtractor(RecordExtractor.constant(IMMUTABLE_RECORDS.toRecordsSet()))
             .setAnnouncementExtractor(announcementExtractor)
             .setScheduler(Scheduler.threadScheduler(2)); // optional
     
@@ -104,12 +104,14 @@ broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
 The library also provides a set of its own pre-packaged tools 
 to facilitate the realization of common business tasks
 
-| Name      | Artifact ID                  | Version | API Usage                                                                                          |
-|-----------|------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate | `social-broadcast-hibernate` | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
-| JDBC      | `social-broadcast-jdbc`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
-| Mailing   | `social-broadcast-smtp`      | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
-| Telegram  | `social-broadcast-telegram`  | 1.0.2   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Name          | Artifact ID                    | Version | API Usage                                                                                          |
+|---------------|--------------------------------|---------|----------------------------------------------------------------------------------------------------|
+| Hibernate     | `social-broadcast-hibernate`   | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
+| Spring Data   | `social-broadcast-spring-data` | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SpringDataBroadcastExample.java)  |
+| Telegram Bots | `social-broadcast-telegram`    | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Redis (jedis) | `social-broadcast-redis`       | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JedisBroadcastExample.java)       |
+| java.sql      | `social-broadcast-jdbc`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
+| javax.mail    | `social-broadcast-smtp`        | 1.0.3   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
@@ -128,7 +130,7 @@ is the dependency identifier from the `Artifact ID` table column:
 **Gradle / Groovy:**
 
 ```groovy
-implementation 'con.github.mikhailterkhov:[Artifact-ID]:[Version]'
+implementation 'con.github.MikhailSterkhov:[Artifact-ID]:[Version]'
 ```
 
 ---
@@ -159,7 +161,7 @@ Dependency:
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
     <artifactId>social-broadcast-engine</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -177,5 +179,5 @@ repositories {
 Dependency:
 
 ```groovy
-implementation 'con.github.mikhailterkhov:social-broadcast-engine:1.0.2'
+implementation 'con.github.MikhailSterkhov:social-broadcast-engine:1.0.3'
 ```
