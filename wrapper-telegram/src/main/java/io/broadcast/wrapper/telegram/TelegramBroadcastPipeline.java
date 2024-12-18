@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import io.broadcast.engine.AbstractBroadcastPipelineWrapper;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.dispatch.ComplexBroadcastDispatcher;
-import io.broadcast.wrapper.telegram.objects.TelegramMessage;
+import io.broadcast.wrapper.telegram.model.TelegramMessage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
