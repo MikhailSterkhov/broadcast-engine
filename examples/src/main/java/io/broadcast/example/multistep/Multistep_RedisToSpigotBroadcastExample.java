@@ -4,7 +4,7 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.wrapper.jeds.extractor.JedisRecordExtractor;
+import io.broadcast.wrapper.jedis.extractor.JedisRecordExtractor;
 import io.broadcast.wrapper.spigot.dispatcher.SpigotDispatcher;
 import redis.clients.jedis.Jedis;
 
