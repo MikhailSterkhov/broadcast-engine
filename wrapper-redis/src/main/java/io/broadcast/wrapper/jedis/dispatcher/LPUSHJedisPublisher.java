@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds.dispatcher;
+package io.broadcast.wrapper.jedis.dispatcher;
 
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;

@@ -1,9 +1,9 @@
-package io.broadcast.wrapper.jeds;
+package io.broadcast.wrapper.jedis;
 
 import io.broadcast.engine.AbstractBroadcastPipelineWrapper;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.wrapper.jeds.dispatcher.JedisDispatcher;
-import io.broadcast.wrapper.jeds.extractor.JedisRecordExtractor;
+import io.broadcast.wrapper.jedis.dispatcher.JedisDispatcher;
+import io.broadcast.wrapper.jedis.extractor.JedisRecordExtractor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

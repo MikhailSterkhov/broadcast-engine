@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds.dispatcher;
+package io.broadcast.wrapper.jedis.dispatcher;
 
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;

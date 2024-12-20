@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds;
+package io.broadcast.wrapper.jedis;
 
 import io.broadcast.engine.BroadcastEngineException;
 import lombok.experimental.StandardException;

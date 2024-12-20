@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds.extractor;
+package io.broadcast.wrapper.jedis.extractor;
 
 import io.broadcast.engine.record.extract.RecordExtractor;
 import org.jetbrains.annotations.Contract;
