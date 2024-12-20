@@ -104,15 +104,15 @@ broadcastEngine.scheduleBroadcastEverytime(Duration.ofDays(1));
 The library also provides a set of its own pre-packaged tools 
 to facilitate the realization of common business tasks
 
-| Name            | Artifact ID                    | Version | API Usage                                                                                          |
-|-----------------|--------------------------------|---------|----------------------------------------------------------------------------------------------------|
-| Hibernate       | `social-broadcast-hibernate`   | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
-| Spring Data     | `social-broadcast-spring-data` | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SpringDataBroadcastExample.java)  |
-| Telegram Bots   | `social-broadcast-telegram`    | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
-| Redis (jedis)   | `social-broadcast-redis`       | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/JedisBroadcastExample.java)       |
-| Spigot (Bukkit) | `social-broadcast-spigot`      | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SpigotBroadcastExample.java)      |
-| java.sql        | `social-broadcast-jdbc`        | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
-| javax.mail      | `social-broadcast-smtp`        | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
+| Name            | Artifact ID   | Version | API Usage                                                                                          |
+|-----------------|---------------|---------|----------------------------------------------------------------------------------------------------|
+| Hibernate       | `hibernate`   | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/HibernateBroadcastExample.java)   |
+| Spring Data     | `spring-data` | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SpringDataBroadcastExample.java)  |
+| Telegram Bots   | `telegram`    | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/TelegramBotBroadcastExample.java) |
+| Redis (jedis)   | `redis`       | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/JedisBroadcastExample.java)       |
+| Spigot (Bukkit) | `spigot`      | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SpigotBroadcastExample.java)      |
+| java.sql        | `jdbc`        | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/JdbcH2BroadcastExample.java)      |
+| javax.mail      | `smtp`        | 1.0.4   | [View code examples](examples/src/main/java/io/broadcast/example/SMTPBroadcastExample.java)        |
 
 To use one of the components specified in the table in your project, 
 simply implement the dependency as follows, where `[Artifact-ID]` 
@@ -123,7 +123,7 @@ is the dependency identifier from the `Artifact ID` table column:
 ```xml
 <dependency>
     <groupId>com.github.MikhailSterkhov</groupId>
-    <artifactId>[Artifact-ID]</artifactId>
+    <artifactId>social-broadcast-[Artifact-ID]</artifactId>
     <version>[Version]</version>
 </dependency>
 ```
@@ -131,7 +131,7 @@ is the dependency identifier from the `Artifact ID` table column:
 **Gradle / Groovy:**
 
 ```groovy
-implementation 'con.github.MikhailSterkhov:[Artifact-ID]:[Version]'
+implementation 'con.github.MikhailSterkhov:social-broadcast-[Artifact-ID]:[Version]'
 ```
 
 ---
