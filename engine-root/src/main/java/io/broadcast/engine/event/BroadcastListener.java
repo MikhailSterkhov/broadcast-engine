@@ -1,6 +1,8 @@
 package io.broadcast.engine.event;
 
 import io.broadcast.engine.event.context.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public interface BroadcastListener {
 
@@ -17,4 +19,9 @@ public interface BroadcastListener {
     void preparedMessage(PreparedMessageEventContext eventContext);
 
     void throwsException(Throwable throwable);
+
+    @Contract(value = " -> new", pure = true)
+    static @NotNull BroadcastListener stdout() {
+        return new STDOUTBroadcastListener();
+    }
 }

@@ -9,12 +9,27 @@
         <version>1.0.4</version>
     </parent>
 
-    <artifactId>social-broadcast-engine</artifactId>
+    <artifactId>social-broadcast-spigot</artifactId>
 
     <properties>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-engine</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

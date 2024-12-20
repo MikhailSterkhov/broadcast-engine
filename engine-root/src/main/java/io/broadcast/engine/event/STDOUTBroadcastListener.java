@@ -2,40 +2,40 @@ package io.broadcast.engine.event;
 
 import io.broadcast.engine.event.context.*;
 
-public abstract class BroadcastEventAdapter implements BroadcastListener {
+public class STDOUTBroadcastListener implements BroadcastListener {
 
     @Override
     public void broadcastStart(BroadcastStartEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void broadcastEnd(BroadcastEndEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void broadcastDispatch(BroadcastDispatchEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void broadcastSchedule(BroadcastScheduleEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void recordExtracted(RecordExtractedEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void preparedMessage(PreparedMessageEventContext eventContext) {
-        // override this.
+        System.out.println(eventContext);
     }
 
     @Override
     public void throwsException(Throwable throwable) {
-        // override this.
+        throwable.printStackTrace();
     }
 }

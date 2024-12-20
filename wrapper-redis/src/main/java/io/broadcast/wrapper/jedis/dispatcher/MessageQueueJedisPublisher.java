@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.jeds.dispatcher;
+package io.broadcast.wrapper.jedis.dispatcher;
 
 import io.broadcast.engine.announcement.ContentedAnnouncement;
 import org.jetbrains.annotations.NotNull;

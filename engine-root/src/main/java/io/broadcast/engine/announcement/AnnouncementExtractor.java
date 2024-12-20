@@ -50,6 +50,11 @@ public interface AnnouncementExtractor<A extends Announcement> {
     }
 
     @Contract(pure = true)
+    static <I, A extends Announcement> @NotNull AnnouncementExtractor<A> fromIDAndExtract(@NotNull Class<I> idClass, @NotNull Function<I, AnnouncementExtractor<A>> announcement) {
+        return fromRecord(idClass, record -> announcement.apply(record.getId()).extractAnnouncement(record));
+    }
+
+    @Contract(pure = true)
     static <T> @NotNull AnnouncementExtractor<ContentedAnnouncement<T>> contented(@Nullable T subject, @Nullable T content) {
         return constant(new ContentedAnnouncement<>(subject, content));
     }

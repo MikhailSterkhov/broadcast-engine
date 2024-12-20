@@ -1,9 +1,7 @@
-package io.broadcast.wrapper.jeds.dispatcher;
+package io.broadcast.wrapper.jedis.dispatcher;
 
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.record.Record;
-import io.broadcast.engine.record.RecordObserver;
-import io.broadcast.wrapper.jeds.extractor.JedisRecordExtractor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;

@@ -3,9 +3,9 @@ package io.broadcast.example;
 import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
-import io.broadcast.wrapper.jeds.JedisBroadcastPipeline;
-import io.broadcast.wrapper.jeds.dispatcher.JedisDispatcher;
-import io.broadcast.wrapper.jeds.extractor.JedisRecordExtractor;
+import io.broadcast.wrapper.jedis.JedisBroadcastPipeline;
+import io.broadcast.wrapper.jedis.dispatcher.JedisDispatcher;
+import io.broadcast.wrapper.jedis.extractor.JedisRecordExtractor;
 import redis.clients.jedis.Jedis;
 
 public class JedisBroadcastExample {
