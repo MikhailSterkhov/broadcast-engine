@@ -6,6 +6,7 @@ import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.StringAnnouncement;
 import io.broadcast.engine.dispatch.BroadcastDispatcher;
 import io.broadcast.engine.event.BroadcastEventAdapter;
+import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.event.context.BroadcastStartEventContext;
 import io.broadcast.engine.event.context.PreparedMessageEventContext;
 import io.broadcast.engine.record.extract.RecordExtractor;
@@ -35,17 +36,7 @@ public class SpringDataBroadcastExample {
                 .setDispatcher(BroadcastDispatcher.stdout())
                 .setRecordExtractor(RecordExtractor.chunkyParallel(new ChunkySpringDataRecordSelector<>(metadata)))
                 .setAnnouncementExtractor(announcementExtractor)
-                .addListener(new BroadcastEventAdapter() {
-                    @Override
-                    public void broadcastStart(BroadcastStartEventContext eventContext) {
-                        System.out.println(eventContext);
-                    }
-
-                    @Override
-                    public void preparedMessage(PreparedMessageEventContext eventContext) {
-                        System.out.println(eventContext);
-                    }
-                })
+                .addListener(BroadcastListener.stdout())
                 .setScheduler(Scheduler.singleThreadScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);

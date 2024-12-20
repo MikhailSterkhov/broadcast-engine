@@ -4,6 +4,7 @@ import io.broadcast.engine.BroadcastEngine;
 import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.ContentedAnnouncement;
+import io.broadcast.engine.event.BroadcastListener;
 import io.broadcast.engine.event.ExceptionListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
@@ -43,12 +44,7 @@ public class SMTPBroadcastExample {
                 .setDispatcher(new SMTPBroadcastDispatcher(smtpMetadata))
                 .setRecordExtractor(RecordExtractor.constant(IMMUTABLE_RECORDS.toRecordsSet()))
                 .setAnnouncementExtractor(announcementExtractor)
-                .addListener(new ExceptionListener() {
-                    @Override
-                    public void throwsException(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                })
+                .addListener(BroadcastListener.stdout())
                 .setScheduler(Scheduler.defaultScheduler());
 
         BroadcastEngine broadcastEngine = new BroadcastEngine(broadcastPipeline);
