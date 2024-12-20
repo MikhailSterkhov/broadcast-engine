@@ -19,6 +19,7 @@
         <module>wrapper-smtp</module>
         <module>wrapper-spring-data</module>
         <module>wrapper-redis</module>
+        <module>wrapper-spigot</module>
     </modules>
 
     <properties>

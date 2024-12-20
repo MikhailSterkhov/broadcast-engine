@@ -14,6 +14,7 @@
     <properties>
         <h2database.version>2.1.214</h2database.version>
         <jedis.version>5.1.5</jedis.version>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
 
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -57,6 +58,11 @@
             <artifactId>social-broadcast-telegram</artifactId>
             <version>1.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.mikhailsterkhov</groupId>
+            <artifactId>social-broadcast-spigot</artifactId>
+            <version>1.0.4</version>
+        </dependency>
 
         <!-- Other helpful dependencies -->
         <dependency>
@@ -68,6 +74,11 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>${jedis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
         </dependency>
     </dependencies>
 </project>
