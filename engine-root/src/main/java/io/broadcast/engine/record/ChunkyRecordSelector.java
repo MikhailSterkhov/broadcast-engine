@@ -8,7 +8,6 @@ package io.broadcast.engine.record;
  * It also provides methods to determine the total size of the dataset and the size of each chunk.</p>
  *
  * @param <I> The type of the identifier used in the records.
- * @param <T> The type of the entity associated with the records.
  */
 public interface ChunkyRecordSelector<I> {
 

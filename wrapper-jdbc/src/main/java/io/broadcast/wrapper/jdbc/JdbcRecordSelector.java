@@ -19,7 +19,8 @@ public class JdbcRecordSelector<I> implements ChunkyRecordSelector<I> {
     @Override
     public long totalSize() {
         Connection connection = metadata.getConnection();
-        String sql = String.format("SELECT COUNT(%s) FROM %s", metadata.getIdColumn(), metadata.getTable());
+        String sql = String.format("SELECT COUNT(%s) FROM %s WHERE %s IS NOT NULL",
+                metadata.getIdColumn(), metadata.getTable(), metadata.getIdColumn());
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -55,9 +56,10 @@ public class JdbcRecordSelector<I> implements ChunkyRecordSelector<I> {
     public Iterable<Record<I>> select(long index) {
         Connection connection = metadata.getConnection();
 
-        String sql = String.format("SELECT %s FROM %s LIMIT %s OFFSET %s",
+        String sql = String.format("SELECT %s FROM %s WHERE %s IS NOT NULL LIMIT %s OFFSET %s",
                 metadata.getIdColumn(),
                 metadata.getTable(),
+                metadata.getIdColumn(),
                 chunkSize(),
                 chunkSize() * index);
 
