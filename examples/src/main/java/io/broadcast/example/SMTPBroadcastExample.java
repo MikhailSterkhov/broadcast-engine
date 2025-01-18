@@ -5,11 +5,10 @@ import io.broadcast.engine.BroadcastPipeline;
 import io.broadcast.engine.announcement.AnnouncementExtractor;
 import io.broadcast.engine.announcement.ContentedAnnouncement;
 import io.broadcast.engine.event.BroadcastListener;
-import io.broadcast.engine.event.ExceptionListener;
 import io.broadcast.engine.record.extract.RecordExtractor;
 import io.broadcast.engine.record.map.RecordsMap;
 import io.broadcast.engine.scheduler.Scheduler;
-import io.broadcast.wrapper.smtp.MailCredentials;
+import io.broadcast.wrapper.smtp.data.MailCredentials;
 import io.broadcast.wrapper.smtp.SMTPBroadcastDispatcher;
 import io.broadcast.wrapper.smtp.SMTPMetadata;
 

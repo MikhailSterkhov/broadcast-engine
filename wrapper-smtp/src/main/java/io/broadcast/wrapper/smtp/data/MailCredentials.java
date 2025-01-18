@@ -1,4 +1,4 @@
-package io.broadcast.wrapper.smtp;
+package io.broadcast.wrapper.smtp.data;
 
 import lombok.Builder;
 import lombok.Getter;
